@@ -3,7 +3,7 @@
  @title: Optimized Sentinel-2 Coregistration using Phase Cross Correlation
  @author: Matthew Tralka
  @date: May 2021
- @version: .1
+ @version: 0.1
 
 """
 from datetime import datetime

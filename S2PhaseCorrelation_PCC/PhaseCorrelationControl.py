@@ -3,7 +3,7 @@
  @title: Optimized Sentinel-2 Coregistration using Phase Cross Correlation
  @author: Matthew Tralka
  @date: May 2021
- @version: .1
+ @version: 0.1
 
 """
 
@@ -12,7 +12,6 @@ from pathlib import Path
 import gdal
 import gdalconst
 import numpy as np
-from numpy.core.numeric import full
 
 from OptimizedPhaseCrossCorrelation import phase_cross_correlation
 
@@ -56,7 +55,6 @@ class PhaseCorrelationControl:
         self._save_results()
 
     def _intake_files(self):
-        """Open & Process `reference` and `moving` files"""
 
         def _extract_array(
             file: Path, band: int = 1, d_type: str = "int16"
@@ -133,12 +131,10 @@ class PhaseCorrelationControl:
 
         out_ds.SetGeoTransform(geo_transform_subset)
         out_ds.SetProjection(reference_ds.GetProjectionRef())
-        print("mean", np.mean(self.total_shift))
         out_ds.GetRasterBand(1).WriteArray(self.total_shift.astype("int16"))
         out_ds.GetRasterBand(1).SetNoDataValue(self.no_data)
 
-        reference_ds = None
-        out_ds = None
+        reference_ds, out_ds = None, None
 
     @property
     def x0(self) -> int:

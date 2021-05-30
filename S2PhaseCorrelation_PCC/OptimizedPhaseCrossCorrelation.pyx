@@ -3,7 +3,7 @@
  @title: Optimized Sentinel-2 Coregistration using Phase Cross Correlation
  @author: Matthew Tralka
  @date: May 2021
- @version: .1
+ @version: 0.1
 
     Algorithm References
     .. [0] Harris CR, Millman KJ, van der Walt SJ, Gommers R, Virtanen P, Cournapeau D, et al.
