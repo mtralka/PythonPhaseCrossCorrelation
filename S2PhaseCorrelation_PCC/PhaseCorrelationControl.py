@@ -175,6 +175,5 @@ class PhaseCorrelationControl:
 
         if not full_name.endswith(".tif"):
             full_name = full_name + ".tif"
-            print(full_name)
-        print("full name", full_name)
+
         return full_name
