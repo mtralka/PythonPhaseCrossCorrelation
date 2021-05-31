@@ -2,11 +2,11 @@
 
 ## CLI
 
-    python main.py --help
+    python S2PhaseCrossCorrelation/main.py --help
 
  explicitly
 
-    python main.py [REFERNCE IMAGE PATH] [MOVING IMAGE PATH] **OPTIONS
+    python S2PhaseCrossCorrelation/main.py [REFERENCE IMAGE PATH] [MOVING IMAGE PATH] **OPTIONS
 
 ## By Import
 
