@@ -4,6 +4,7 @@ build/
 *.vscode
 L1C_T18SUJ_A016353_20180809T160022/*
 L1C_T18SUJ_A016353_20180809T160022
+Testing.ipynb
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
