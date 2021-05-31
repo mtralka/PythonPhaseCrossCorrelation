@@ -6,7 +6,7 @@ Optimized and pythonic program for phase cross correlation of imagery products
 
 |                             | Time (seconds) | Note |
 |-----------------------------|:--------------:|------|
-| Scikit-Image - 0 Upscaling |                |      |
+| Scikit-Image - 0 Upscaling |      307      |      |
 | **.this - 0 Upscaling**        |       **74**       |      |
 | Scikit-Image - 100 Upscaling |      1020      |      |
 |     **.this - 100 Upscaling**    |       **780**      | *optimized upscaling not yet implemented, benchmarked using scikit-image dft upscaling* |
