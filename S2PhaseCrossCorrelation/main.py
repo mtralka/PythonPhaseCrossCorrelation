@@ -14,16 +14,17 @@ import typer
 
 from OPCC.PhaseCorrelationControl import PhaseCorrelationControl
 
+
 app = typer.Typer()
 
 
-def index_callback(value: int):
+def index_callback(value: int) -> int:
     if value < -1:
         raise typer.BadParameter("Index must be positive or -1 (full extent)")
     return value
 
 
-def window_option_callback(value: int):
+def window_option_callback(value: int) -> int:
     if value < 0:
         raise typer.BadParameter("Window option must be positive")
     return value
