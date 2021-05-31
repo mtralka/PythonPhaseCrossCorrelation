@@ -21,3 +21,8 @@
     )
 
 unless specified, `outfile_dir` is the absolute dir of `main.py` and `outfile_name` is `parallax_ISOTIMESTAMP`
+
+## ReCompile OPCC algorithm
+
+    cd S2PhaseCrossCorrelation/OPCC
+    python setup.py build_ext --inplace
