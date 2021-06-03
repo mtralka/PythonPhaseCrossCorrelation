@@ -27,6 +27,7 @@ class PhaseCorrelationControl:
         moving_img: Union[Path, str],
         outfile_dir: Union[Path, str] = Path(__file__).parent.absolute(),
         outfile_name: str = f"parallax_{datetime.now().isoformat(timespec='minutes')}",
+        upsample: int = 1,
         col_start: int = -1,
         col_end: int = -1,
         row_start: int = -1,
@@ -61,6 +62,7 @@ class PhaseCorrelationControl:
             setattr(self, name, path)
 
         self.outfile_name: str = self._get_valid_filename(outfile_name)
+        self.upsample: int = upsample
         self.col_start: int = col_start
         self.col_end: int = col_end
         self.row_start: int = row_start
@@ -120,6 +122,7 @@ class PhaseCorrelationControl:
             self.window_size,
             self.window_step,
             self.no_data,
+            self.upsample,
         )
 
         total_shift = np.where(

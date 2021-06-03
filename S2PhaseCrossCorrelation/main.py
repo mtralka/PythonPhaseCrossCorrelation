@@ -30,6 +30,12 @@ def window_option_callback(value: int) -> int:
     return value
 
 
+def upsample_callback(value: int) -> int:
+    if value < 0:
+        raise typer.BadParameter("Upsample value must be positive")
+    return value
+
+
 @app.command()
 def main(
     reference_path: Path = typer.Argument(
@@ -109,6 +115,12 @@ def main(
         help="Correlation window step size",
         callback=window_option_callback
     ),
+    upsample: Optional[int] = typer.Option(
+        1,
+        "--upsample", "-up",
+        help="Register image within 1 / n of a pixel",
+        callback=upsample_callback
+    ),
 ):
     PhaseCorrelationControl(
         reference_path,
@@ -121,6 +133,7 @@ def main(
         row_end=row_end,
         window_size=window_size,
         window_step=window_step,
+        upsample=upsample
     )  
 
 

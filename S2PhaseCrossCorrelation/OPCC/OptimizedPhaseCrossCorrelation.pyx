@@ -61,7 +61,8 @@ cdef find_shift(int[:, :] reference_image, int[:, :] moving_image,
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def phase_cross_correlation(int[:, :] reference_arr, int[:, :] moving_arr, int window_size = 64, int window_step = 64, double no_data = -9999. ):
+def phase_cross_correlation(int[:, :] reference_arr, int[:, :] moving_arr, int window_size = 64, 
+    int window_step = 64, double no_data = -9999., int upsample):
     
     cdef Py_ssize_t x_max = reference_arr.shape[0]
     cdef Py_ssize_t y_max = reference_arr.shape[1]
