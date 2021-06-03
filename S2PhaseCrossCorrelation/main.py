@@ -7,15 +7,21 @@
 
 """
 from datetime import datetime
+from enum import Enum
 from pathlib import Path
 from typing import Optional
 
 import typer
 
-from OPCC.PhaseCorrelationControl import PhaseCorrelationControl
+from PCC import PhaseCorrelationControl
 
 
 app = typer.Typer()
+
+
+class PCCMethods(str, Enum):
+    cpu = "CPU"
+    gpu = "GPU"
 
 
 def index_callback(value: int) -> int:
@@ -121,6 +127,11 @@ def main(
         help="Register image within 1 / n of a pixel",
         callback=upsample_callback
     ),
+    method: PCCMethods = typer.Option(
+        PCCMethods.cpu,
+        "--method", "-m",
+        help="Compute method for PCC",
+    )
 ):
     PhaseCorrelationControl(
         reference_path,
@@ -133,8 +144,9 @@ def main(
         row_end=row_end,
         window_size=window_size,
         window_step=window_step,
-        upsample=upsample
-    )  
+        upsample=upsample,
+        method=method.value
+    )
 
 
 if __name__ == "__main__":

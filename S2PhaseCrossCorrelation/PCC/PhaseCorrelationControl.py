@@ -12,12 +12,13 @@ from pathlib import Path
 import re
 from typing import Dict
 from typing import Union
+import warnings
 
 import gdal
 import gdalconst
 import numpy as np
 
-from OPCC.OptimizedPhaseCrossCorrelation import phase_cross_correlation
+from .CPU_PCC.OptimizedPhaseCrossCorrelation import phase_cross_correlation as pcc_cpu
 
 
 class PhaseCorrelationControl:
@@ -36,6 +37,7 @@ class PhaseCorrelationControl:
         window_step: int = 6,
         outfile_driver: str = "GTiff",
         no_data: float = -9999.0,
+        method: str = "CPU"
     ):
 
         path_inputs: Dict[Union[Path, str], str] = {
@@ -43,6 +45,8 @@ class PhaseCorrelationControl:
             moving_img: "moving_path",
             outfile_dir: "outfile_dir"
         }
+
+        method_inputs: list = ["cpu", "gpu"]
 
         for path, name in path_inputs.items():
 
@@ -61,6 +65,17 @@ class PhaseCorrelationControl:
 
             setattr(self, name, path)
 
+        # TODO
+        if method.strip().lower() == 'gpu':
+            raise NotImplementedError("GPU not implemented. Use CPU")
+
+        if method.strip().lower() in method_inputs:
+            self.method = method.strip().lower()
+        else:
+            raise AttributeError(
+                f"{method} not recognized. \
+                Select from {method_inputs.join(', ')}")
+
         self.outfile_name: str = self._get_valid_filename(outfile_name)
         self.upsample: int = upsample
         self.col_start: int = col_start
@@ -73,6 +88,11 @@ class PhaseCorrelationControl:
         self.outfile_type = gdalconst.GDT_Int16
         self.no_data: float = float(no_data)
         self.total_shift = None
+
+        if self.upsample > 1:
+            warnings.warn(
+                "CPU upsampling not implemented. Performance will be impacted",
+                NotImplemented)
 
         self.run()
 
@@ -116,14 +136,17 @@ class PhaseCorrelationControl:
 
     def _process_correlation(self):
 
-        total_shift = phase_cross_correlation(
-            self.reference_arr,
-            self.moving_arr,
-            self.window_size,
-            self.window_step,
-            self.no_data,
-            self.upsample,
-        )
+        if self.method == 'cpu':
+            total_shift = pcc_cpu(
+                self.reference_arr,
+                self.moving_arr,
+                self.window_size,
+                self.window_step,
+                self.no_data,
+                self.upsample,
+            )
+        elif self.method == 'gpu':
+            raise NotImplementedError("GPU not implemented")
 
         total_shift = np.where(
             total_shift != self.no_data, 1000.0 * total_shift, self.no_data

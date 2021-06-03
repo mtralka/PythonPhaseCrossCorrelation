@@ -2300,6 +2300,7 @@ static const char __pyx_k_offset_x[] = "offset_x";
 static const char __pyx_k_offset_y[] = "offset_y";
 static const char __pyx_k_pyx_type[] = "__pyx_type";
 static const char __pyx_k_setstate[] = "__setstate__";
+static const char __pyx_k_upsample[] = "upsample";
 static const char __pyx_k_TypeError[] = "TypeError";
 static const char __pyx_k_col_start[] = "col_start";
 static const char __pyx_k_enumerate[] = "enumerate";
@@ -2498,6 +2499,7 @@ static PyObject *__pyx_kp_s_unable_to_allocate_shape_and_str;
 static PyObject *__pyx_n_s_unpack;
 static PyObject *__pyx_n_s_unravel_index;
 static PyObject *__pyx_n_s_update;
+static PyObject *__pyx_n_s_upsample;
 static PyObject *__pyx_n_s_window_size;
 static PyObject *__pyx_n_s_window_start;
 static PyObject *__pyx_n_s_window_step;
@@ -2507,7 +2509,7 @@ static PyObject *__pyx_n_s_x_max;
 static PyObject *__pyx_n_s_y;
 static PyObject *__pyx_n_s_y_arrange;
 static PyObject *__pyx_n_s_y_max;
-static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlation(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_reference_arr, __Pyx_memviewslice __pyx_v_moving_arr, int __pyx_v_window_size, int __pyx_v_window_step, double __pyx_v_no_data); /* proto */
+static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlation(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_reference_arr, __Pyx_memviewslice __pyx_v_moving_arr, int __pyx_v_window_size, int __pyx_v_window_step, double __pyx_v_no_data, CYTHON_UNUSED int __pyx_v_upsample); /* proto */
 static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __pyx_array_obj *__pyx_v_self, PyObject *__pyx_v_shape, Py_ssize_t __pyx_v_itemsize, PyObject *__pyx_v_format, PyObject *__pyx_v_mode, int __pyx_v_allocate_buffer); /* proto */
 static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array_2__getbuffer__(struct __pyx_array_obj *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_array___pyx_pf_15View_dot_MemoryView_5array_4__dealloc__(struct __pyx_array_obj *__pyx_v_self); /* proto */
@@ -3282,9 +3284,9 @@ static PyObject *__pyx_f_30OptimizedPhaseCrossCorrelation_find_shift(__Pyx_memvi
 /* "OptimizedPhaseCrossCorrelation.pyx":64
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * def phase_cross_correlation(int[:, :] reference_arr, int[:, :] moving_arr, int window_size = 64, int window_step = 64, double no_data = -9999. ):             # <<<<<<<<<<<<<<
+ * def phase_cross_correlation(int[:, :] reference_arr, int[:, :] moving_arr, int window_size = 64,             # <<<<<<<<<<<<<<
+ *     int window_step = 64, double no_data = -9999., int upsample = 1):
  * 
- *     cdef Py_ssize_t x_max = reference_arr.shape[0]
  */
 
 /* Python wrapper */
@@ -3296,6 +3298,7 @@ static PyObject *__pyx_pw_30OptimizedPhaseCrossCorrelation_1phase_cross_correlat
   int __pyx_v_window_size;
   int __pyx_v_window_step;
   double __pyx_v_no_data;
+  CYTHON_UNUSED int __pyx_v_upsample;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -3303,12 +3306,14 @@ static PyObject *__pyx_pw_30OptimizedPhaseCrossCorrelation_1phase_cross_correlat
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("phase_cross_correlation (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_reference_arr,&__pyx_n_s_moving_arr,&__pyx_n_s_window_size,&__pyx_n_s_window_step,&__pyx_n_s_no_data,0};
-    PyObject* values[5] = {0,0,0,0,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_reference_arr,&__pyx_n_s_moving_arr,&__pyx_n_s_window_size,&__pyx_n_s_window_step,&__pyx_n_s_no_data,&__pyx_n_s_upsample,0};
+    PyObject* values[6] = {0,0,0,0,0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
       switch (pos_args) {
+        case  6: values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
+        CYTHON_FALLTHROUGH;
         case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
         CYTHON_FALLTHROUGH;
         case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
@@ -3331,7 +3336,7 @@ static PyObject *__pyx_pw_30OptimizedPhaseCrossCorrelation_1phase_cross_correlat
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_moving_arr)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("phase_cross_correlation", 0, 2, 5, 1); __PYX_ERR(0, 64, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("phase_cross_correlation", 0, 2, 6, 1); __PYX_ERR(0, 64, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -3351,12 +3356,20 @@ static PyObject *__pyx_pw_30OptimizedPhaseCrossCorrelation_1phase_cross_correlat
           PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_no_data);
           if (value) { values[4] = value; kw_args--; }
         }
+        CYTHON_FALLTHROUGH;
+        case  5:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_upsample);
+          if (value) { values[5] = value; kw_args--; }
+        }
       }
       if (unlikely(kw_args > 0)) {
         if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "phase_cross_correlation") < 0)) __PYX_ERR(0, 64, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
+        case  6: values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
+        CYTHON_FALLTHROUGH;
         case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
         CYTHON_FALLTHROUGH;
         case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
@@ -3377,32 +3390,37 @@ static PyObject *__pyx_pw_30OptimizedPhaseCrossCorrelation_1phase_cross_correlat
       __pyx_v_window_size = ((int)64);
     }
     if (values[3]) {
-      __pyx_v_window_step = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_window_step == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L3_error)
+      __pyx_v_window_step = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_window_step == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 65, __pyx_L3_error)
     } else {
       __pyx_v_window_step = ((int)64);
     }
     if (values[4]) {
-      __pyx_v_no_data = __pyx_PyFloat_AsDouble(values[4]); if (unlikely((__pyx_v_no_data == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L3_error)
+      __pyx_v_no_data = __pyx_PyFloat_AsDouble(values[4]); if (unlikely((__pyx_v_no_data == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 65, __pyx_L3_error)
     } else {
       __pyx_v_no_data = ((double)-9999.);
+    }
+    if (values[5]) {
+      __pyx_v_upsample = __Pyx_PyInt_As_int(values[5]); if (unlikely((__pyx_v_upsample == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 65, __pyx_L3_error)
+    } else {
+      __pyx_v_upsample = ((int)1);
     }
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("phase_cross_correlation", 0, 2, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 64, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("phase_cross_correlation", 0, 2, 6, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 64, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("OptimizedPhaseCrossCorrelation.phase_cross_correlation", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlation(__pyx_self, __pyx_v_reference_arr, __pyx_v_moving_arr, __pyx_v_window_size, __pyx_v_window_step, __pyx_v_no_data);
+  __pyx_r = __pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlation(__pyx_self, __pyx_v_reference_arr, __pyx_v_moving_arr, __pyx_v_window_size, __pyx_v_window_step, __pyx_v_no_data, __pyx_v_upsample);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlation(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_reference_arr, __Pyx_memviewslice __pyx_v_moving_arr, int __pyx_v_window_size, int __pyx_v_window_step, double __pyx_v_no_data) {
+static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlation(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_reference_arr, __Pyx_memviewslice __pyx_v_moving_arr, int __pyx_v_window_size, int __pyx_v_window_step, double __pyx_v_no_data, CYTHON_UNUSED int __pyx_v_upsample) {
   Py_ssize_t __pyx_v_x_max;
   Py_ssize_t __pyx_v_y_max;
   PyArrayObject *__pyx_v_total_shift = 0;
@@ -3446,8 +3464,8 @@ static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlati
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("phase_cross_correlation", 0);
 
-  /* "OptimizedPhaseCrossCorrelation.pyx":66
- * def phase_cross_correlation(int[:, :] reference_arr, int[:, :] moving_arr, int window_size = 64, int window_step = 64, double no_data = -9999. ):
+  /* "OptimizedPhaseCrossCorrelation.pyx":67
+ *     int window_step = 64, double no_data = -9999., int upsample = 1):
  * 
  *     cdef Py_ssize_t x_max = reference_arr.shape[0]             # <<<<<<<<<<<<<<
  *     cdef Py_ssize_t y_max = reference_arr.shape[1]
@@ -3455,7 +3473,7 @@ static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlati
  */
   __pyx_v_x_max = (__pyx_v_reference_arr.shape[0]);
 
-  /* "OptimizedPhaseCrossCorrelation.pyx":67
+  /* "OptimizedPhaseCrossCorrelation.pyx":68
  * 
  *     cdef Py_ssize_t x_max = reference_arr.shape[0]
  *     cdef Py_ssize_t y_max = reference_arr.shape[1]             # <<<<<<<<<<<<<<
@@ -3464,7 +3482,7 @@ static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlati
  */
   __pyx_v_y_max = (__pyx_v_reference_arr.shape[1]);
 
-  /* "OptimizedPhaseCrossCorrelation.pyx":69
+  /* "OptimizedPhaseCrossCorrelation.pyx":70
  *     cdef Py_ssize_t y_max = reference_arr.shape[1]
  * 
  *     assert tuple(reference_arr.shape) == tuple(moving_arr.shape)             # <<<<<<<<<<<<<<
@@ -3473,47 +3491,47 @@ static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlati
  */
   #ifndef CYTHON_WITHOUT_ASSERTIONS
   if (unlikely(!Py_OptimizeFlag)) {
-    __pyx_t_1 = __Pyx_carray_to_py_Py_ssize_t(__pyx_v_reference_arr.shape, 8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 69, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_carray_to_py_Py_ssize_t(__pyx_v_reference_arr.shape, 8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 70, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_PySequence_Tuple(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 69, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PySequence_Tuple(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 70, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_carray_to_py_Py_ssize_t(__pyx_v_moving_arr.shape, 8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 69, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_carray_to_py_Py_ssize_t(__pyx_v_moving_arr.shape, 8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 70, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_PySequence_Tuple(__pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 69, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PySequence_Tuple(__pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 70, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = PyObject_RichCompare(__pyx_t_2, __pyx_t_3, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 69, __pyx_L1_error)
+    __pyx_t_1 = PyObject_RichCompare(__pyx_t_2, __pyx_t_3, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 70, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 69, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 70, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (unlikely(!__pyx_t_4)) {
       PyErr_SetNone(PyExc_AssertionError);
-      __PYX_ERR(0, 69, __pyx_L1_error)
+      __PYX_ERR(0, 70, __pyx_L1_error)
     }
   }
   #endif
 
-  /* "OptimizedPhaseCrossCorrelation.pyx":71
+  /* "OptimizedPhaseCrossCorrelation.pyx":72
  *     assert tuple(reference_arr.shape) == tuple(moving_arr.shape)
  * 
  *     cdef np.ndarray total_shift = no_data * np.ones((x_max, y_max), dtype=DTYPE)             # <<<<<<<<<<<<<<
  *     cdef double[:,:] total_shift_view = total_shift
  * 
  */
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_no_data); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_no_data); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_ones); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_ones); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyInt_FromSsize_t(__pyx_v_x_max); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __pyx_t_3 = PyInt_FromSsize_t(__pyx_v_x_max); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_5 = PyInt_FromSsize_t(__pyx_v_y_max); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __pyx_t_5 = PyInt_FromSsize_t(__pyx_v_y_max); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_GIVEREF(__pyx_t_3);
   PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_3);
@@ -3521,43 +3539,43 @@ static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlati
   PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_t_5);
   __pyx_t_3 = 0;
   __pyx_t_5 = 0;
-  __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_GIVEREF(__pyx_t_6);
   PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_6);
   __pyx_t_6 = 0;
-  __pyx_t_6 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_DTYPE); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_DTYPE); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_dtype, __pyx_t_3) < 0) __PYX_ERR(0, 71, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_dtype, __pyx_t_3) < 0) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = PyNumber_Multiply(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __pyx_t_6 = PyNumber_Multiply(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 71, __pyx_L1_error)
+  if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 72, __pyx_L1_error)
   __pyx_v_total_shift = ((PyArrayObject *)__pyx_t_6);
   __pyx_t_6 = 0;
 
-  /* "OptimizedPhaseCrossCorrelation.pyx":72
+  /* "OptimizedPhaseCrossCorrelation.pyx":73
  * 
  *     cdef np.ndarray total_shift = no_data * np.ones((x_max, y_max), dtype=DTYPE)
  *     cdef double[:,:] total_shift_view = total_shift             # <<<<<<<<<<<<<<
  * 
  *     cdef int window_start = window_size / 2
  */
-  __pyx_t_7 = __Pyx_PyObject_to_MemoryviewSlice_dsds_double(((PyObject *)__pyx_v_total_shift), PyBUF_WRITABLE); if (unlikely(!__pyx_t_7.memview)) __PYX_ERR(0, 72, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_to_MemoryviewSlice_dsds_double(((PyObject *)__pyx_v_total_shift), PyBUF_WRITABLE); if (unlikely(!__pyx_t_7.memview)) __PYX_ERR(0, 73, __pyx_L1_error)
   __pyx_v_total_shift_view = __pyx_t_7;
   __pyx_t_7.memview = NULL;
   __pyx_t_7.data = NULL;
 
-  /* "OptimizedPhaseCrossCorrelation.pyx":74
+  /* "OptimizedPhaseCrossCorrelation.pyx":75
  *     cdef double[:,:] total_shift_view = total_shift
  * 
  *     cdef int window_start = window_size / 2             # <<<<<<<<<<<<<<
@@ -3566,25 +3584,25 @@ static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlati
  */
   __pyx_v_window_start = __Pyx_div_long(__pyx_v_window_size, 2);
 
-  /* "OptimizedPhaseCrossCorrelation.pyx":76
+  /* "OptimizedPhaseCrossCorrelation.pyx":77
  *     cdef int window_start = window_size / 2
  * 
  *     cdef int[:] x_arrange = np.arange(window_start,x_max, window_step, dtype=DTYPE).astype('int')             # <<<<<<<<<<<<<<
  *     cdef int[:] y_arrange = np.arange(window_start, y_max, window_step, dtype=DTYPE).astype('int')
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 76, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 77, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_arange); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 76, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_arange); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 77, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_window_start); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 76, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_window_start); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 77, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_5 = PyInt_FromSsize_t(__pyx_v_x_max); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 76, __pyx_L1_error)
+  __pyx_t_5 = PyInt_FromSsize_t(__pyx_v_x_max); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 77, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_window_step); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 76, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_window_step); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 77, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_8 = PyTuple_New(3); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 76, __pyx_L1_error)
+  __pyx_t_8 = PyTuple_New(3); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 77, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
   __Pyx_GIVEREF(__pyx_t_3);
   PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_3);
@@ -3595,18 +3613,18 @@ static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlati
   __pyx_t_3 = 0;
   __pyx_t_5 = 0;
   __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 76, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 77, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_DTYPE); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 76, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_DTYPE); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 77, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_dtype, __pyx_t_5) < 0) __PYX_ERR(0, 76, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_dtype, __pyx_t_5) < 0) __PYX_ERR(0, 77, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_8, __pyx_t_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 76, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_8, __pyx_t_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 77, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_astype); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 76, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_astype); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 77, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_t_5 = NULL;
@@ -3621,34 +3639,34 @@ static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlati
   }
   __pyx_t_6 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_5, __pyx_n_s_int) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_n_s_int);
   __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 76, __pyx_L1_error)
+  if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 77, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_9 = __Pyx_PyObject_to_MemoryviewSlice_ds_int(__pyx_t_6, PyBUF_WRITABLE); if (unlikely(!__pyx_t_9.memview)) __PYX_ERR(0, 76, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyObject_to_MemoryviewSlice_ds_int(__pyx_t_6, PyBUF_WRITABLE); if (unlikely(!__pyx_t_9.memview)) __PYX_ERR(0, 77, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __pyx_v_x_arrange = __pyx_t_9;
   __pyx_t_9.memview = NULL;
   __pyx_t_9.data = NULL;
 
-  /* "OptimizedPhaseCrossCorrelation.pyx":77
+  /* "OptimizedPhaseCrossCorrelation.pyx":78
  * 
  *     cdef int[:] x_arrange = np.arange(window_start,x_max, window_step, dtype=DTYPE).astype('int')
  *     cdef int[:] y_arrange = np.arange(window_start, y_max, window_step, dtype=DTYPE).astype('int')             # <<<<<<<<<<<<<<
  * 
  *     cdef Py_ssize_t x, y
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 77, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_arange); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 77, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_arange); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_window_start); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 77, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_window_start); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_8 = PyInt_FromSsize_t(__pyx_v_y_max); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 77, __pyx_L1_error)
+  __pyx_t_8 = PyInt_FromSsize_t(__pyx_v_y_max); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_window_step); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 77, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_window_step); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 77, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_2);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_2);
@@ -3659,18 +3677,18 @@ static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlati
   __pyx_t_2 = 0;
   __pyx_t_8 = 0;
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 77, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_n_s_DTYPE); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 77, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_n_s_DTYPE); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_8) < 0) __PYX_ERR(0, 77, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_8) < 0) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 77, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_8, __pyx_n_s_astype); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 77, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_8, __pyx_n_s_astype); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
   __pyx_t_8 = NULL;
@@ -3685,31 +3703,31 @@ static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlati
   }
   __pyx_t_6 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_8, __pyx_n_s_int) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_n_s_int);
   __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-  if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 77, __pyx_L1_error)
+  if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_9 = __Pyx_PyObject_to_MemoryviewSlice_ds_int(__pyx_t_6, PyBUF_WRITABLE); if (unlikely(!__pyx_t_9.memview)) __PYX_ERR(0, 77, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyObject_to_MemoryviewSlice_ds_int(__pyx_t_6, PyBUF_WRITABLE); if (unlikely(!__pyx_t_9.memview)) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __pyx_v_y_arrange = __pyx_t_9;
   __pyx_t_9.memview = NULL;
   __pyx_t_9.data = NULL;
 
-  /* "OptimizedPhaseCrossCorrelation.pyx":85
+  /* "OptimizedPhaseCrossCorrelation.pyx":86
  *     cdef int[:,:] reference_window, moving_window
  * 
  *     for x in x_arrange:             # <<<<<<<<<<<<<<
  *         for y in y_arrange:
  * 
  */
-  __pyx_t_6 = __pyx_memoryview_fromslice(__pyx_v_x_arrange, 1, (PyObject *(*)(char *)) __pyx_memview_get_int, (int (*)(char *, PyObject *)) __pyx_memview_set_int, 0);; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 85, __pyx_L1_error)
+  __pyx_t_6 = __pyx_memoryview_fromslice(__pyx_v_x_arrange, 1, (PyObject *(*)(char *)) __pyx_memview_get_int, (int (*)(char *, PyObject *)) __pyx_memview_set_int, 0);; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 86, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   if (likely(PyList_CheckExact(__pyx_t_6)) || PyTuple_CheckExact(__pyx_t_6)) {
     __pyx_t_1 = __pyx_t_6; __Pyx_INCREF(__pyx_t_1); __pyx_t_10 = 0;
     __pyx_t_11 = NULL;
   } else {
-    __pyx_t_10 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 85, __pyx_L1_error)
+    __pyx_t_10 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 86, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_11 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 85, __pyx_L1_error)
+    __pyx_t_11 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 86, __pyx_L1_error)
   }
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   for (;;) {
@@ -3717,17 +3735,17 @@ static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlati
       if (likely(PyList_CheckExact(__pyx_t_1))) {
         if (__pyx_t_10 >= PyList_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_6 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_10); __Pyx_INCREF(__pyx_t_6); __pyx_t_10++; if (unlikely(0 < 0)) __PYX_ERR(0, 85, __pyx_L1_error)
+        __pyx_t_6 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_10); __Pyx_INCREF(__pyx_t_6); __pyx_t_10++; if (unlikely(0 < 0)) __PYX_ERR(0, 86, __pyx_L1_error)
         #else
-        __pyx_t_6 = PySequence_ITEM(__pyx_t_1, __pyx_t_10); __pyx_t_10++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 85, __pyx_L1_error)
+        __pyx_t_6 = PySequence_ITEM(__pyx_t_1, __pyx_t_10); __pyx_t_10++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 86, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
         #endif
       } else {
         if (__pyx_t_10 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_6 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_10); __Pyx_INCREF(__pyx_t_6); __pyx_t_10++; if (unlikely(0 < 0)) __PYX_ERR(0, 85, __pyx_L1_error)
+        __pyx_t_6 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_10); __Pyx_INCREF(__pyx_t_6); __pyx_t_10++; if (unlikely(0 < 0)) __PYX_ERR(0, 86, __pyx_L1_error)
         #else
-        __pyx_t_6 = PySequence_ITEM(__pyx_t_1, __pyx_t_10); __pyx_t_10++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 85, __pyx_L1_error)
+        __pyx_t_6 = PySequence_ITEM(__pyx_t_1, __pyx_t_10); __pyx_t_10++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 86, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
         #endif
       }
@@ -3737,32 +3755,32 @@ static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlati
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 85, __pyx_L1_error)
+          else __PYX_ERR(0, 86, __pyx_L1_error)
         }
         break;
       }
       __Pyx_GOTREF(__pyx_t_6);
     }
-    __pyx_t_12 = __Pyx_PyIndex_AsSsize_t(__pyx_t_6); if (unlikely((__pyx_t_12 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 85, __pyx_L1_error)
+    __pyx_t_12 = __Pyx_PyIndex_AsSsize_t(__pyx_t_6); if (unlikely((__pyx_t_12 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 86, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __pyx_v_x = __pyx_t_12;
 
-    /* "OptimizedPhaseCrossCorrelation.pyx":86
+    /* "OptimizedPhaseCrossCorrelation.pyx":87
  * 
  *     for x in x_arrange:
  *         for y in y_arrange:             # <<<<<<<<<<<<<<
  * 
  *             row_start = x - window_start
  */
-    __pyx_t_6 = __pyx_memoryview_fromslice(__pyx_v_y_arrange, 1, (PyObject *(*)(char *)) __pyx_memview_get_int, (int (*)(char *, PyObject *)) __pyx_memview_set_int, 0);; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 86, __pyx_L1_error)
+    __pyx_t_6 = __pyx_memoryview_fromslice(__pyx_v_y_arrange, 1, (PyObject *(*)(char *)) __pyx_memview_get_int, (int (*)(char *, PyObject *)) __pyx_memview_set_int, 0);; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 87, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     if (likely(PyList_CheckExact(__pyx_t_6)) || PyTuple_CheckExact(__pyx_t_6)) {
       __pyx_t_8 = __pyx_t_6; __Pyx_INCREF(__pyx_t_8); __pyx_t_12 = 0;
       __pyx_t_13 = NULL;
     } else {
-      __pyx_t_12 = -1; __pyx_t_8 = PyObject_GetIter(__pyx_t_6); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 86, __pyx_L1_error)
+      __pyx_t_12 = -1; __pyx_t_8 = PyObject_GetIter(__pyx_t_6); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 87, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_13 = Py_TYPE(__pyx_t_8)->tp_iternext; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 86, __pyx_L1_error)
+      __pyx_t_13 = Py_TYPE(__pyx_t_8)->tp_iternext; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 87, __pyx_L1_error)
     }
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     for (;;) {
@@ -3770,17 +3788,17 @@ static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlati
         if (likely(PyList_CheckExact(__pyx_t_8))) {
           if (__pyx_t_12 >= PyList_GET_SIZE(__pyx_t_8)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_6 = PyList_GET_ITEM(__pyx_t_8, __pyx_t_12); __Pyx_INCREF(__pyx_t_6); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 86, __pyx_L1_error)
+          __pyx_t_6 = PyList_GET_ITEM(__pyx_t_8, __pyx_t_12); __Pyx_INCREF(__pyx_t_6); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 87, __pyx_L1_error)
           #else
-          __pyx_t_6 = PySequence_ITEM(__pyx_t_8, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 86, __pyx_L1_error)
+          __pyx_t_6 = PySequence_ITEM(__pyx_t_8, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 87, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_6);
           #endif
         } else {
           if (__pyx_t_12 >= PyTuple_GET_SIZE(__pyx_t_8)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_6 = PyTuple_GET_ITEM(__pyx_t_8, __pyx_t_12); __Pyx_INCREF(__pyx_t_6); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 86, __pyx_L1_error)
+          __pyx_t_6 = PyTuple_GET_ITEM(__pyx_t_8, __pyx_t_12); __Pyx_INCREF(__pyx_t_6); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 87, __pyx_L1_error)
           #else
-          __pyx_t_6 = PySequence_ITEM(__pyx_t_8, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 86, __pyx_L1_error)
+          __pyx_t_6 = PySequence_ITEM(__pyx_t_8, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 87, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_6);
           #endif
         }
@@ -3790,17 +3808,17 @@ static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlati
           PyObject* exc_type = PyErr_Occurred();
           if (exc_type) {
             if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-            else __PYX_ERR(0, 86, __pyx_L1_error)
+            else __PYX_ERR(0, 87, __pyx_L1_error)
           }
           break;
         }
         __Pyx_GOTREF(__pyx_t_6);
       }
-      __pyx_t_14 = __Pyx_PyIndex_AsSsize_t(__pyx_t_6); if (unlikely((__pyx_t_14 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 86, __pyx_L1_error)
+      __pyx_t_14 = __Pyx_PyIndex_AsSsize_t(__pyx_t_6); if (unlikely((__pyx_t_14 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 87, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __pyx_v_y = __pyx_t_14;
 
-      /* "OptimizedPhaseCrossCorrelation.pyx":88
+      /* "OptimizedPhaseCrossCorrelation.pyx":89
  *         for y in y_arrange:
  * 
  *             row_start = x - window_start             # <<<<<<<<<<<<<<
@@ -3809,7 +3827,7 @@ static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlati
  */
       __pyx_v_row_start = (__pyx_v_x - __pyx_v_window_start);
 
-      /* "OptimizedPhaseCrossCorrelation.pyx":89
+      /* "OptimizedPhaseCrossCorrelation.pyx":90
  * 
  *             row_start = x - window_start
  *             row_end = x + window_start             # <<<<<<<<<<<<<<
@@ -3818,7 +3836,7 @@ static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlati
  */
       __pyx_v_row_end = (__pyx_v_x + __pyx_v_window_start);
 
-      /* "OptimizedPhaseCrossCorrelation.pyx":90
+      /* "OptimizedPhaseCrossCorrelation.pyx":91
  *             row_start = x - window_start
  *             row_end = x + window_start
  *             col_start = y - window_start             # <<<<<<<<<<<<<<
@@ -3827,7 +3845,7 @@ static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlati
  */
       __pyx_v_col_start = (__pyx_v_y - __pyx_v_window_start);
 
-      /* "OptimizedPhaseCrossCorrelation.pyx":91
+      /* "OptimizedPhaseCrossCorrelation.pyx":92
  *             row_end = x + window_start
  *             col_start = y - window_start
  *             col_end = y + window_start             # <<<<<<<<<<<<<<
@@ -3836,7 +3854,7 @@ static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlati
  */
       __pyx_v_col_end = (__pyx_v_y + __pyx_v_window_start);
 
-      /* "OptimizedPhaseCrossCorrelation.pyx":93
+      /* "OptimizedPhaseCrossCorrelation.pyx":94
  *             col_end = y + window_start
  * 
  *             reference_window = reference_arr[row_start:row_end, col_start:col_end]             # <<<<<<<<<<<<<<
@@ -3861,7 +3879,7 @@ static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlati
     0,
     1) < 0))
 {
-    __PYX_ERR(0, 93, __pyx_L1_error)
+    __PYX_ERR(0, 94, __pyx_L1_error)
 }
 
 if (unlikely(__pyx_memoryview_slice_memviewslice(
@@ -3878,7 +3896,7 @@ if (unlikely(__pyx_memoryview_slice_memviewslice(
     0,
     1) < 0))
 {
-    __PYX_ERR(0, 93, __pyx_L1_error)
+    __PYX_ERR(0, 94, __pyx_L1_error)
 }
 
 __PYX_XDEC_MEMVIEW(&__pyx_v_reference_window, 1);
@@ -3886,7 +3904,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_reference_window, 1);
       __pyx_t_15.memview = NULL;
       __pyx_t_15.data = NULL;
 
-      /* "OptimizedPhaseCrossCorrelation.pyx":94
+      /* "OptimizedPhaseCrossCorrelation.pyx":95
  * 
  *             reference_window = reference_arr[row_start:row_end, col_start:col_end]
  *             moving_window = moving_arr[row_start:row_end, col_start:col_end]             # <<<<<<<<<<<<<<
@@ -3911,7 +3929,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_reference_window, 1);
     0,
     1) < 0))
 {
-    __PYX_ERR(0, 94, __pyx_L1_error)
+    __PYX_ERR(0, 95, __pyx_L1_error)
 }
 
 if (unlikely(__pyx_memoryview_slice_memviewslice(
@@ -3928,7 +3946,7 @@ if (unlikely(__pyx_memoryview_slice_memviewslice(
     0,
     1) < 0))
 {
-    __PYX_ERR(0, 94, __pyx_L1_error)
+    __PYX_ERR(0, 95, __pyx_L1_error)
 }
 
 __PYX_XDEC_MEMVIEW(&__pyx_v_moving_window, 1);
@@ -3936,87 +3954,87 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_moving_window, 1);
       __pyx_t_15.memview = NULL;
       __pyx_t_15.data = NULL;
 
-      /* "OptimizedPhaseCrossCorrelation.pyx":95
+      /* "OptimizedPhaseCrossCorrelation.pyx":96
  *             reference_window = reference_arr[row_start:row_end, col_start:col_end]
  *             moving_window = moving_arr[row_start:row_end, col_start:col_end]
  *             offset_pixels = find_shift(reference_window, moving_window)             # <<<<<<<<<<<<<<
  * 
  *             offset_x = int(offset_pixels[0])
  */
-      __pyx_t_6 = __pyx_f_30OptimizedPhaseCrossCorrelation_find_shift(__pyx_v_reference_window, __pyx_v_moving_window, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 95, __pyx_L1_error)
+      __pyx_t_6 = __pyx_f_30OptimizedPhaseCrossCorrelation_find_shift(__pyx_v_reference_window, __pyx_v_moving_window, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 96, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_XDECREF_SET(__pyx_v_offset_pixels, __pyx_t_6);
       __pyx_t_6 = 0;
 
-      /* "OptimizedPhaseCrossCorrelation.pyx":97
+      /* "OptimizedPhaseCrossCorrelation.pyx":98
  *             offset_pixels = find_shift(reference_window, moving_window)
  * 
  *             offset_x = int(offset_pixels[0])             # <<<<<<<<<<<<<<
  *             offset_y = int(offset_pixels[1])
  *             total_shift_view[row_start:row_end,col_start:col_end] = \
  */
-      __pyx_t_6 = __Pyx_GetItemInt(__pyx_v_offset_pixels, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 97, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_GetItemInt(__pyx_v_offset_pixels, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 98, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_3 = __Pyx_PyNumber_Int(__pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 97, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyNumber_Int(__pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 98, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __pyx_t_16 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_16 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 97, __pyx_L1_error)
+      __pyx_t_16 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_16 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 98, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __pyx_v_offset_x = __pyx_t_16;
 
-      /* "OptimizedPhaseCrossCorrelation.pyx":98
+      /* "OptimizedPhaseCrossCorrelation.pyx":99
  * 
  *             offset_x = int(offset_pixels[0])
  *             offset_y = int(offset_pixels[1])             # <<<<<<<<<<<<<<
  *             total_shift_view[row_start:row_end,col_start:col_end] = \
  *                 np.sqrt(1.* offset_y * offset_y + offset_x * offset_x, dtype=np.double)
  */
-      __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_offset_pixels, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 98, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_offset_pixels, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 99, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_6 = __Pyx_PyNumber_Int(__pyx_t_3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 98, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyNumber_Int(__pyx_t_3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 99, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_16 = __Pyx_PyInt_As_int(__pyx_t_6); if (unlikely((__pyx_t_16 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 98, __pyx_L1_error)
+      __pyx_t_16 = __Pyx_PyInt_As_int(__pyx_t_6); if (unlikely((__pyx_t_16 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 99, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __pyx_v_offset_y = __pyx_t_16;
 
-      /* "OptimizedPhaseCrossCorrelation.pyx":100
+      /* "OptimizedPhaseCrossCorrelation.pyx":101
  *             offset_y = int(offset_pixels[1])
  *             total_shift_view[row_start:row_end,col_start:col_end] = \
  *                 np.sqrt(1.* offset_y * offset_y + offset_x * offset_x, dtype=np.double)             # <<<<<<<<<<<<<<
  * 
  *     return total_shift
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_np); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 100, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_np); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 101, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_sqrt); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 100, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_sqrt); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 101, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __pyx_t_6 = PyFloat_FromDouble((((1. * __pyx_v_offset_y) * __pyx_v_offset_y) + (__pyx_v_offset_x * __pyx_v_offset_x))); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 100, __pyx_L1_error)
+      __pyx_t_6 = PyFloat_FromDouble((((1. * __pyx_v_offset_y) * __pyx_v_offset_y) + (__pyx_v_offset_x * __pyx_v_offset_x))); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 101, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 100, __pyx_L1_error)
+      __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 101, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_GIVEREF(__pyx_t_6);
       PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_6);
       __pyx_t_6 = 0;
-      __pyx_t_6 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 100, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 101, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 100, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 101, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_double); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 100, __pyx_L1_error)
+      __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_double); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 101, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_17);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_dtype, __pyx_t_17) < 0) __PYX_ERR(0, 100, __pyx_L1_error)
+      if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_dtype, __pyx_t_17) < 0) __PYX_ERR(0, 101, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-      __pyx_t_17 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 100, __pyx_L1_error)
+      __pyx_t_17 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 101, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_17);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __pyx_t_18 = __pyx_PyFloat_AsDouble(__pyx_t_17); if (unlikely((__pyx_t_18 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 100, __pyx_L1_error)
+      __pyx_t_18 = __pyx_PyFloat_AsDouble(__pyx_t_17); if (unlikely((__pyx_t_18 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 101, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
 
-      /* "OptimizedPhaseCrossCorrelation.pyx":99
+      /* "OptimizedPhaseCrossCorrelation.pyx":100
  *             offset_x = int(offset_pixels[0])
  *             offset_y = int(offset_pixels[1])
  *             total_shift_view[row_start:row_end,col_start:col_end] = \             # <<<<<<<<<<<<<<
@@ -4041,7 +4059,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_moving_window, 1);
     0,
     1) < 0))
 {
-    __PYX_ERR(0, 99, __pyx_L1_error)
+    __PYX_ERR(0, 100, __pyx_L1_error)
 }
 
 if (unlikely(__pyx_memoryview_slice_memviewslice(
@@ -4058,7 +4076,7 @@ if (unlikely(__pyx_memoryview_slice_memviewslice(
     0,
     1) < 0))
 {
-    __PYX_ERR(0, 99, __pyx_L1_error)
+    __PYX_ERR(0, 100, __pyx_L1_error)
 }
 
 {
@@ -4087,7 +4105,7 @@ if (unlikely(__pyx_memoryview_slice_memviewslice(
       __pyx_t_7.memview = NULL;
       __pyx_t_7.data = NULL;
 
-      /* "OptimizedPhaseCrossCorrelation.pyx":86
+      /* "OptimizedPhaseCrossCorrelation.pyx":87
  * 
  *     for x in x_arrange:
  *         for y in y_arrange:             # <<<<<<<<<<<<<<
@@ -4097,7 +4115,7 @@ if (unlikely(__pyx_memoryview_slice_memviewslice(
     }
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-    /* "OptimizedPhaseCrossCorrelation.pyx":85
+    /* "OptimizedPhaseCrossCorrelation.pyx":86
  *     cdef int[:,:] reference_window, moving_window
  * 
  *     for x in x_arrange:             # <<<<<<<<<<<<<<
@@ -4107,7 +4125,7 @@ if (unlikely(__pyx_memoryview_slice_memviewslice(
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "OptimizedPhaseCrossCorrelation.pyx":102
+  /* "OptimizedPhaseCrossCorrelation.pyx":103
  *                 np.sqrt(1.* offset_y * offset_y + offset_x * offset_x, dtype=np.double)
  * 
  *     return total_shift             # <<<<<<<<<<<<<<
@@ -4120,9 +4138,9 @@ if (unlikely(__pyx_memoryview_slice_memviewslice(
   /* "OptimizedPhaseCrossCorrelation.pyx":64
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * def phase_cross_correlation(int[:, :] reference_arr, int[:, :] moving_arr, int window_size = 64, int window_step = 64, double no_data = -9999. ):             # <<<<<<<<<<<<<<
+ * def phase_cross_correlation(int[:, :] reference_arr, int[:, :] moving_arr, int window_size = 64,             # <<<<<<<<<<<<<<
+ *     int window_step = 64, double no_data = -9999., int upsample = 1):
  * 
- *     cdef Py_ssize_t x_max = reference_arr.shape[0]
  */
 
   /* function exit code */
@@ -19299,6 +19317,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_unpack, __pyx_k_unpack, sizeof(__pyx_k_unpack), 0, 0, 1, 1},
   {&__pyx_n_s_unravel_index, __pyx_k_unravel_index, sizeof(__pyx_k_unravel_index), 0, 0, 1, 1},
   {&__pyx_n_s_update, __pyx_k_update, sizeof(__pyx_k_update), 0, 0, 1, 1},
+  {&__pyx_n_s_upsample, __pyx_k_upsample, sizeof(__pyx_k_upsample), 0, 0, 1, 1},
   {&__pyx_n_s_window_size, __pyx_k_window_size, sizeof(__pyx_k_window_size), 0, 0, 1, 1},
   {&__pyx_n_s_window_start, __pyx_k_window_start, sizeof(__pyx_k_window_start), 0, 0, 1, 1},
   {&__pyx_n_s_window_step, __pyx_k_window_step, sizeof(__pyx_k_window_step), 0, 0, 1, 1},
@@ -19546,14 +19565,14 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   /* "OptimizedPhaseCrossCorrelation.pyx":64
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * def phase_cross_correlation(int[:, :] reference_arr, int[:, :] moving_arr, int window_size = 64, int window_step = 64, double no_data = -9999. ):             # <<<<<<<<<<<<<<
+ * def phase_cross_correlation(int[:, :] reference_arr, int[:, :] moving_arr, int window_size = 64,             # <<<<<<<<<<<<<<
+ *     int window_step = 64, double no_data = -9999., int upsample = 1):
  * 
- *     cdef Py_ssize_t x_max = reference_arr.shape[0]
  */
-  __pyx_tuple__22 = PyTuple_Pack(23, __pyx_n_s_reference_arr, __pyx_n_s_moving_arr, __pyx_n_s_window_size, __pyx_n_s_window_step, __pyx_n_s_no_data, __pyx_n_s_x_max, __pyx_n_s_y_max, __pyx_n_s_total_shift, __pyx_n_s_total_shift_view, __pyx_n_s_window_start, __pyx_n_s_x_arrange, __pyx_n_s_y_arrange, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_row_start, __pyx_n_s_row_end, __pyx_n_s_col_start, __pyx_n_s_col_end, __pyx_n_s_offset_x, __pyx_n_s_offset_y, __pyx_n_s_reference_window, __pyx_n_s_moving_window, __pyx_n_s_offset_pixels); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(0, 64, __pyx_L1_error)
+  __pyx_tuple__22 = PyTuple_Pack(24, __pyx_n_s_reference_arr, __pyx_n_s_moving_arr, __pyx_n_s_window_size, __pyx_n_s_window_step, __pyx_n_s_no_data, __pyx_n_s_upsample, __pyx_n_s_x_max, __pyx_n_s_y_max, __pyx_n_s_total_shift, __pyx_n_s_total_shift_view, __pyx_n_s_window_start, __pyx_n_s_x_arrange, __pyx_n_s_y_arrange, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_row_start, __pyx_n_s_row_end, __pyx_n_s_col_start, __pyx_n_s_col_end, __pyx_n_s_offset_x, __pyx_n_s_offset_y, __pyx_n_s_reference_window, __pyx_n_s_moving_window, __pyx_n_s_offset_pixels); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(0, 64, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__22);
   __Pyx_GIVEREF(__pyx_tuple__22);
-  __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(5, 0, 23, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__22, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_OptimizedPhaseCrossCorrelation_p, __pyx_n_s_phase_cross_correlation, 64, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(0, 64, __pyx_L1_error)
+  __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(6, 0, 24, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__22, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_OptimizedPhaseCrossCorrelation_p, __pyx_n_s_phase_cross_correlation, 64, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(0, 64, __pyx_L1_error)
 
   /* "View.MemoryView":286
  *         return self.name
@@ -20075,9 +20094,9 @@ if (!__Pyx_RefNanny) {
   /* "OptimizedPhaseCrossCorrelation.pyx":64
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * def phase_cross_correlation(int[:, :] reference_arr, int[:, :] moving_arr, int window_size = 64, int window_step = 64, double no_data = -9999. ):             # <<<<<<<<<<<<<<
+ * def phase_cross_correlation(int[:, :] reference_arr, int[:, :] moving_arr, int window_size = 64,             # <<<<<<<<<<<<<<
+ *     int window_step = 64, double no_data = -9999., int upsample = 1):
  * 
- *     cdef Py_ssize_t x_max = reference_arr.shape[0]
  */
   __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_30OptimizedPhaseCrossCorrelation_1phase_cross_correlation, NULL, __pyx_n_s_OptimizedPhaseCrossCorrelation); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 64, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
