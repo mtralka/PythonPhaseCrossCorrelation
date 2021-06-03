@@ -27,11 +27,12 @@ import numpy as np
 import scipy.fft as fft
 cimport cython
 cimport numpy as np
+from skimage.registration._phase_cross_correlation import _upsampled_dft
 
 DTYPE = np.int16
 
 cdef find_shift(int[:, :] reference_image, int[:, :] moving_image,
-                            int upsample_factor=1,
+                            int upsample=1,
                             double overlap_ratio=0.3):
 
     src_freq = fft.fftn(reference_image)
@@ -53,6 +54,28 @@ cdef find_shift(int[:, :] reference_image, int[:, :] moving_image,
     shifts = np.stack(maxima).astype(np.float64)
     shifts[shifts > midpoints] -= np.array((src_freq_x, src_freq_y))[shifts > midpoints]
 
+    if upsample >= 1:
+
+        shifts = np.round(shifts * upsample) / upsample
+        upsampled_region_size = np.ceil(upsample * 1.5)
+       
+        dftshift = np.fix(upsampled_region_size / 2.0)
+        upsample = np.array(upsample, dtype=np.float64)
+
+        sample_region_offset = dftshift - shifts * upsample
+        cross_correlation = _upsampled_dft(image_product.conj(),
+                                           upsampled_region_size,
+                                           upsample,
+                                           sample_region_offset).conj()
+
+        maxima = np.unravel_index(np.argmax(np.abs(cross_correlation)),
+                                  cross_correlation.shape)
+        CCmax = cross_correlation[maxima]
+
+        maxima = np.stack(maxima).astype(np.float64) - dftshift
+
+        shifts = shifts + maxima / upsample
+    
     for dim in range(src_freq.ndim):
         if (src_freq_x, src_freq_y)[dim] == 1:
             shifts[dim] = 0
@@ -93,11 +116,11 @@ def phase_cross_correlation(int[:, :] reference_arr, int[:, :] moving_arr, int w
             
             reference_window = reference_arr[row_start:row_end, col_start:col_end]
             moving_window = moving_arr[row_start:row_end, col_start:col_end]
-            offset_pixels = find_shift(reference_window, moving_window)
+            offset_pixels = find_shift(reference_window, moving_window, upsample=upsample)
 
-            offset_x = int(offset_pixels[0])
-            offset_y = int(offset_pixels[1])
+            # TODO
+            # This needs to reference a memory view
             total_shift_view[row_start:row_end,col_start:col_end] = \
-                np.sqrt(1.* offset_y * offset_y + offset_x * offset_x, dtype=np.double)
+                np.sqrt(1.* offset_pixels[1] * offset_pixels[1] + offset_pixels[0] * offset_pixels[0], dtype=np.double)
 
     return total_shift

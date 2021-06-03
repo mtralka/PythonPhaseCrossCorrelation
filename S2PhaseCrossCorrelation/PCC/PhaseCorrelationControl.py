@@ -18,10 +18,49 @@ import gdal
 import gdalconst
 import numpy as np
 
-from .CPU_PCC.OptimizedPhaseCrossCorrelation import phase_cross_correlation as pcc_cpu
+from .CPU.OptimizedPhaseCrossCorrelation import phase_cross_correlation as pcc_cpu
 
 
 class PhaseCorrelationControl:
+    """
+    Phase Correlation Control Clasas
+
+    Attributes
+    ----------
+    `reference_img` : str or Path
+        Path to desired reference image
+    `moving_img` : str or Path
+        Path to desired moving image
+    `outfile_dir` : str or Path
+        Path to desired output directory. Default parent directory
+    `outfile_name` : str
+        Name of outfile. Default to iso timestamp
+    `upsample` : int
+        Upsampling factor for sub-pixel correlation. Default 1
+    `col_start` : int
+        Upper left starting column - X0. Default `-1` - full
+    `col_end` : int
+        Lower right ending column - X1. Default `-1` - full
+    `row_start` : int
+        Upper right starting row - Y0. Default `-1` - full
+    `row_end` : int
+        Lower right ending row - Y1. Default `-1` - full
+    `window_size` : int
+        Window size for PCC. Default `64`
+    `window_step` : int
+        Window step for PCC. Default `6`
+    `outfile_driver` str
+        GDAL driver type. Default `GTiff`
+    `no_data` : float
+        NODATA value for GDAl. Default `-9999.0`
+    `method` : str
+        Processing type - `CPU` or `GPU`. Default `CPU`
+
+    Methods
+    -------
+    `run()`
+        Run all private class methods for PCC
+    """
     def __init__(
         self,
         reference_img: Union[Path, str],
@@ -46,7 +85,7 @@ class PhaseCorrelationControl:
             outfile_dir: "outfile_dir"
         }
 
-        method_inputs: list = ["cpu", "gpu"]
+        method_inputs: list = ["CPU", "GPU"]
 
         for path, name in path_inputs.items():
 
@@ -66,15 +105,14 @@ class PhaseCorrelationControl:
             setattr(self, name, path)
 
         # TODO
-        if method.strip().lower() == 'gpu':
+        if method.strip().upper() == 'GPU':
             raise NotImplementedError("GPU not implemented. Use CPU")
 
-        if method.strip().lower() in method_inputs:
-            self.method = method.strip().lower()
+        if method.strip().upper() in method_inputs:
+            self.method = method.strip().upper()
         else:
             raise AttributeError(
-                f"{method} not recognized. \
-                Select from {method_inputs.join(', ')}")
+                f"{method} not recognized. Select from {', '.join(method_inputs)}")
 
         self.outfile_name: str = self._get_valid_filename(outfile_name)
         self.upsample: int = upsample
@@ -92,11 +130,15 @@ class PhaseCorrelationControl:
         if self.upsample > 1:
             warnings.warn(
                 "CPU upsampling not implemented. Performance will be impacted",
-                NotImplemented)
+                Warning)
 
         self.run()
 
     def run(self) -> None:
+        """
+        Time and run all private methods required for PCC
+
+        """
 
         start = datetime.now()
         self._intake_files()
@@ -105,6 +147,10 @@ class PhaseCorrelationControl:
         print(f"Complete in: {datetime.now() - start}")
 
     def _intake_files(self):
+        """
+        Opens and extracts arrays from target `reference` and `moving` files
+
+        """
 
         def _extract_array(
             file: Path, band: int = 1, d_type: str = "int16"
@@ -135,8 +181,7 @@ class PhaseCorrelationControl:
         ].astype("intc")
 
     def _process_correlation(self):
-
-        if self.method == 'cpu':
+        if self.method.upper() == "CPU":
             total_shift = pcc_cpu(
                 self.reference_arr,
                 self.moving_arr,
@@ -145,8 +190,10 @@ class PhaseCorrelationControl:
                 self.no_data,
                 self.upsample,
             )
-        elif self.method == 'gpu':
+        elif self.method.upper() == "GPU":
             raise NotImplementedError("GPU not implemented")
+        else:
+            raise AttributeError("`method` must be `CPU` or `GPU`")
 
         total_shift = np.where(
             total_shift != self.no_data, 1000.0 * total_shift, self.no_data
@@ -156,6 +203,10 @@ class PhaseCorrelationControl:
         self.total_shift = total_shift
 
     def _save_results(self):
+        """
+        Saves `total_shift` array to disk
+
+        """
 
         out_driver = gdal.GetDriverByName(self.outfile_driver)
         out_ds = out_driver.Create(
@@ -194,6 +245,7 @@ class PhaseCorrelationControl:
     def _get_valid_filename(name: str) -> str:
         """
         Returns sanitizied filename. Credit @ Django
+
         """
         washed = name.strip().replace(' ', '_')
         washed = re.sub(r'(?u)[^-\w.]', '', washed)
