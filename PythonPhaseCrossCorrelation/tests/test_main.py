@@ -7,8 +7,10 @@
 
 """
 
+import os
 from pathlib import Path
 import sys
+from typing import List
 
 import gdal
 import numpy as np
@@ -26,7 +28,11 @@ TEST_MOVING_FILE: str = "./IMG_DATA/T18SUJ_20180809T154901_B02.jp2"
 TEST_OUTFILE_DIR: str = "./IMG_DATA/"
 TEST_OUTFILE_NAME: str = "TEST_FILE.tif"
 
-TEST_CORRELATION_MEAN: dict = {1: 126.266904}  # upscaling factor : mean
+
+TEST_SUITE: List[dict] = [
+    {"upsample": 1, "mean": 126.266904},
+    {"upsample": 100, "mean": 244.066272}
+]
 
 
 def get_file_mean(path: Path) -> float:
@@ -43,9 +49,7 @@ def get_file_mean(path: Path) -> float:
 
 def test_app():
 
-    for upscaling, mean in TEST_CORRELATION_MEAN.items():
-
-        # TODO add `upscaling` to invokation
+    for test in TEST_SUITE:
         result = runner.invoke(
             app,
             [
@@ -54,13 +58,18 @@ def test_app():
                 "--out-path",
                 TEST_OUTFILE_DIR,
                 "--out-name",
-                TEST_OUTFILE_NAME
+                TEST_OUTFILE_NAME,
+                "--upsample",
+                test["upsample"]
             ]
         )
+
         outfile = Path(TEST_OUTFILE_DIR) / TEST_OUTFILE_NAME
 
         assert result.exit_code == 0
         assert "Complete" in result.stdout
         assert outfile.exists()
         assert outfile.is_file()
-        assert get_file_mean(outfile) == mean
+        assert get_file_mean(outfile) == test["mean"]
+
+        os.remove(str(outfile))

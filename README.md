@@ -1,29 +1,29 @@
-# Sentinel2PhaseCrossCorrelation
+# Python Phase Cross Correlation
 
-Optimized and pythonic program for phase cross correlation of imagery products
+Optimized CPU & GPU implementation of phase cross correlation. Target usage for remote sensing coregistration
 
 ## Comparison
 
-|                             | Time (seconds) | Note |
-|-----------------------------|:--------------:|------|
-| Scikit-Image - 0 Upscaling |      307      |      |
-| **.this - 0 Upscaling**        |       **74**       |      |
-| Scikit-Image - 100 Upscaling |      1020      |      |
-|     **.this - 100 Upscaling**    |       **780**      | *optimized upscaling not yet implemented, benchmarked using scikit-image dft upscaling* |
+|                              | Time (seconds) | Improvement | Note                  |
+|------------------------------|:--------------:|-------------|-----------------------|
+| Scikit-Image - No Upscaling  |       307        |             |                       |
+| .this - No Upscaling         |       74       |     **414%**    |                       |
+| Scikit-Image - 100 Upscaling |      1020      |             |                       |
+|     .this - 100 Upscaling    |       540      |     **188%**    | *Not fully implemented* |
 
 *as benchmarked on an i7-4790K @ 4.0 GHz, 16GB ram*
 
 ## CLI
 
-    python S2PhaseCrossCorrelation/main.py --help
+    python PythonPhaseCrossCorrelation/main.py --help
 
  explicitly
 
-    python S2PhaseCrossCorrelation/main.py [REFERENCE IMAGE PATH] [MOVING IMAGE PATH] **OPTIONS
+    python PythonPhaseCrossCorrelation/main.py [REFERENCE IMAGE PATH] [MOVING IMAGE PATH] **OPTIONS
 
 ## Object
 
-    from OPCC import PhaseCorrelationControl
+    from PCC import PhaseCorrelationControl
     
     reference_image_path: Union[str, Path] = "path/to/reference/image"
     moving_image_path: Union[str, Path] = "path/to/moving/image"
@@ -33,14 +33,27 @@ Optimized and pythonic program for phase cross correlation of imagery products
         moving_image_path
     )
 
-unless specified, `outfile_dir` is the absolute dir of `main.py` and `outfile_name` is `parallax_ISOTIMESTAMP`
+unless specified, `outfile_dir` is the absolute dir of `main.py` and `outfile_name` is `parallax_{ISOTIMESTAMP}`
 
-## ReCompile OPCC algorithm
+## ReCompile CPU-based PCC algorithm
 
-    cd S2PhaseCrossCorrelation/OPCC
+    cd PythonPhaseCrossCorrelation/PCC/CPU
     python setup.py build_ext --inplace
+
+## GPU-based PCC algorithm
+
+    not yet implemented
+
+## Test
+
+    cd PythonPhaseCrossCorrelation/tests
+    pytest
+
+Validates PCC results against benchmarked data
 
 ## ToDo
 
 - Implement optimized DFT upscaling
+  - validate results
+- finish implementation of PyTorch-based GPU algorithm
 - explore Parallelization options

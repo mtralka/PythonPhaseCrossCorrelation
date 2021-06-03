@@ -7,15 +7,21 @@
 
 """
 from datetime import datetime
+from enum import Enum
 from pathlib import Path
 from typing import Optional
 
 import typer
 
-from OPCC.PhaseCorrelationControl import PhaseCorrelationControl
+from PCC import PhaseCorrelationControl
 
 
 app = typer.Typer()
+
+
+class PCCMethods(str, Enum):
+    cpu = "CPU"
+    gpu = "GPU"
 
 
 def index_callback(value: int) -> int:
@@ -27,6 +33,12 @@ def index_callback(value: int) -> int:
 def window_option_callback(value: int) -> int:
     if value < 0:
         raise typer.BadParameter("Window option must be positive")
+    return value
+
+
+def upsample_callback(value: int) -> int:
+    if value < 0:
+        raise typer.BadParameter("Upsample value must be positive")
     return value
 
 
@@ -109,6 +121,17 @@ def main(
         help="Correlation window step size",
         callback=window_option_callback
     ),
+    upsample: Optional[int] = typer.Option(
+        1,
+        "--upsample", "-up",
+        help="Register image within 1 / n of a pixel",
+        callback=upsample_callback
+    ),
+    method: PCCMethods = typer.Option(
+        PCCMethods.cpu,
+        "--method", "-m",
+        help="Compute method for PCC",
+    )
 ):
     PhaseCorrelationControl(
         reference_path,
@@ -121,7 +144,9 @@ def main(
         row_end=row_end,
         window_size=window_size,
         window_step=window_step,
-    )  
+        upsample=upsample,
+        method=method.value
+    )
 
 
 if __name__ == "__main__":
