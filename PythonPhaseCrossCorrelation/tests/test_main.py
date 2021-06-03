@@ -30,8 +30,8 @@ TEST_OUTFILE_NAME: str = "TEST_FILE.tif"
 
 
 TEST_SUITE: List[dict] = [
-    {"upsample": 1, "mean": 126.27175272072384},
-    {"upsample": 100, "mean": 244.44065218218088}
+    {"upsample": 1, "mean": 126.266904},
+    {"upsample": 100, "mean": 244.066272}
 ]
 
 

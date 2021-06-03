@@ -241,6 +241,8 @@ class PhaseCorrelationControl:
 
         reference_ds, out_ds = None, None
 
+        print(np.mean(self.total_shift))
+
     @staticmethod
     def _get_valid_filename(name: str) -> str:
         """
