@@ -9,7 +9,7 @@ Optimized CPU & GPU implementation of phase cross correlation. Target usage for 
 | Scikit-Image - No Upscaling  |       307        |             |                       |
 | .this - No Upscaling         |       74       |     **414%**    |                       |
 | Scikit-Image - 100 Upscaling |      1020      |             |                       |
-|     .this - 100 Upscaling    |       540      |     **188%**    | *Not fully implemented* |
+|     .this - 100 Upscaling    |       540      |     **188%**    | *Not fully optimized* |
 
 *as benchmarked on an i7-4790K @ 4.0 GHz, 16GB ram*
 
