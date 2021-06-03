@@ -15,11 +15,11 @@ Optimized CPU & GPU implementation of phase cross correlation. Target usage for 
 
 ## CLI
 
-    python S2PhaseCrossCorrelation/main.py --help
+    python PythonPhaseCrossCorrelation/main.py --help
 
  explicitly
 
-    python S2PhaseCrossCorrelation/main.py [REFERENCE IMAGE PATH] [MOVING IMAGE PATH] **OPTIONS
+    python PythonPhaseCrossCorrelation/main.py [REFERENCE IMAGE PATH] [MOVING IMAGE PATH] **OPTIONS
 
 ## Object
 
@@ -37,7 +37,7 @@ unless specified, `outfile_dir` is the absolute dir of `main.py` and `outfile_na
 
 ## ReCompile CPU-based PCC algorithm
 
-    cd S2PhaseCrossCorrelation/PCC/CPU
+    cd PythonPhaseCrossCorrelation/PCC/CPU
     python setup.py build_ext --inplace
 
 ## GPU-based PCC algorithm
@@ -46,7 +46,7 @@ unless specified, `outfile_dir` is the absolute dir of `main.py` and `outfile_na
 
 ## Test
 
-    cd S2PhaseCrossCorrelation/tests
+    cd PythonPhaseCrossCorrelation/tests
     pytest
 
 Validates PCC results against benchmarked data
