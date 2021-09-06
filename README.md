@@ -22,7 +22,7 @@ This project uses `conda`. To use locally, please create and activate the requir
 
 ## Docker
 
-For convenience, this project include a dockerfile and docker-compose for consistent and worry-free development across multiple machine.
+For convenience, this project includes a dockerfile and docker-compose for consistent and worry-free development across multiple machine.
 
 With `docker` and `docker-compose` installed:
 
@@ -30,7 +30,7 @@ With `docker` and `docker-compose` installed:
 
 A Jupyter Notebook instance will then be accessible at `http://localhost:8888/?token=PPCC`
 
-- `/PythonPhaseCrossCorrelation/` is live-mounted to `/PCC/PythonPhaseCrossCorrelation`
+- `/PythonPhaseCrossCorrelation/` is live-mounted to `/PythonPhaseCrossCorrelation/`
 - Port `8888` passed through
 - Jupyter Notebook token `PPCC`
 
@@ -44,6 +44,8 @@ To access local-files in the docker container mount addition volumes as needed
 
     python PythonPhaseCrossCorrelation/main.py [REFERENCE IMAGE PATH] [MOVING IMAGE PATH] **OPTIONS
 
+![CLI Example](images\PythonPhaseCrossCorrelation-CLI-Example.png)
+
 ## Object
 
     from PCC import PhaseCorrelationControl
@@ -56,7 +58,7 @@ To access local-files in the docker container mount addition volumes as needed
         moving_image_path
     )
 
-see `/ExampleNotebook.ipynb`
+see `ExampleNotebook.ipynb`
 
 unless specified, `outfile_dir` is the absolute dir of `main.py` and `outfile_name` is `parallax_{ISOTIMESTAMP}`
 
