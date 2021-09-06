@@ -44,7 +44,7 @@ To access local-files in the docker container mount addition volumes as needed
 
     python PythonPhaseCrossCorrelation/main.py [REFERENCE IMAGE PATH] [MOVING IMAGE PATH] **OPTIONS
 
-![CLI Example](images\PythonPhaseCrossCorrelation-CLI-Example.png)
+![CLI Example](/images/PythonPhaseCrossCorrelation-CLI-Example.png)
 
 ## Object
 
