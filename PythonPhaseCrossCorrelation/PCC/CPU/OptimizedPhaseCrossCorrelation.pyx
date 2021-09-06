@@ -1,6 +1,6 @@
 """
 
- @title: Optimized Sentinel-2 Coregistration using Phase Cross Correlation
+ @title: Optimized Python Phase Cross Correlation
  @author: Matthew Tralka
  @date: May 2021
  @version: 0.1

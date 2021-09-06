@@ -7,8 +7,8 @@ WORKDIR /PPCC
 COPY environment.yml .
 RUN CONDA_RESTORE_FREE_CHANNEL=1 conda env create -f environment.yml
 
-RUN echo "conda activate PPCC" >> ~/.bashrc
-SHELL ["/bin/bash", "--login", "-c"]
+SHELL ["conda", "run", "-n", "PPCC", "/bin/bash", "-c"]
 
 COPY . .
 
+ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "PPCC", "python", "main.py"]
