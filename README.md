@@ -13,6 +13,13 @@ Optimized CPU & GPU implementation of phase cross correlation. Target usage for 
 
 *as benchmarked on an i7-4790K @ 4.0 GHz, 16GB ram*
 
+## Dependencies
+
+This project uses `conda`. Please create and activate the required conda command using the `environment.yml` found in `PythonPhaseCrossCorrelation/environment.yml`
+
+    conda env create -f environment.yml
+    conda activate PPCC
+
 ## CLI
 
     python PythonPhaseCrossCorrelation/main.py --help
