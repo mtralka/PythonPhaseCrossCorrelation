@@ -1,0 +1,9 @@
+
+version: "3"
+services:
+  ppcc:
+    build:
+      context: ./PythonPhaseCrossCorrelation
+      dockerfile: dockerfile
+    volumes:
+      - ./PythonPhaseCrossCorrelation:/PCC/PythonPhaseCrossCorrelation

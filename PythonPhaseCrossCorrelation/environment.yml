@@ -1,6 +1,7 @@
 name: PPCC
 channels:
   - defaults
+  - conda-forge
 dependencies:
   - argon2-cffi=20.1.0=py37h2bbff1b_1
   - async_generator=1.10=py37h28b3542_0
