@@ -2247,7 +2247,6 @@ static const char __pyx_k__21[] = "*";
 static const char __pyx_k_abs[] = "abs";
 static const char __pyx_k_fft[] = "fft";
 static const char __pyx_k_fix[] = "fix";
-static const char __pyx_k_int[] = "int";
 static const char __pyx_k_new[] = "__new__";
 static const char __pyx_k_obj[] = "obj";
 static const char __pyx_k_base[] = "base";
@@ -2255,6 +2254,7 @@ static const char __pyx_k_ceil[] = "ceil";
 static const char __pyx_k_conj[] = "conj";
 static const char __pyx_k_dict[] = "__dict__";
 static const char __pyx_k_fftn[] = "fftn";
+static const char __pyx_k_intc[] = "intc";
 static const char __pyx_k_main[] = "__main__";
 static const char __pyx_k_mode[] = "mode";
 static const char __pyx_k_name[] = "name";
@@ -2446,8 +2446,8 @@ static PyObject *__pyx_kp_s_got_differing_extents_in_dimensi;
 static PyObject *__pyx_n_s_id;
 static PyObject *__pyx_n_s_ifftn;
 static PyObject *__pyx_n_s_import;
-static PyObject *__pyx_n_s_int;
 static PyObject *__pyx_n_s_int16;
+static PyObject *__pyx_n_s_intc;
 static PyObject *__pyx_n_s_itemsize;
 static PyObject *__pyx_kp_s_itemsize_0_for_cython_array;
 static PyObject *__pyx_n_s_main;
@@ -4136,15 +4136,15 @@ static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlati
  * 
  *     cdef int window_start = window_size / 2             # <<<<<<<<<<<<<<
  * 
- *     cdef int[:] x_arrange = np.arange(window_start, x_max, window_step, dtype=DTYPE).astype('int')
+ *     cdef int[:] x_arrange = np.arange(window_start, x_max, window_step, dtype=DTYPE).astype('intc')
  */
   __pyx_v_window_start = __Pyx_div_long(__pyx_v_window_size, 2);
 
   /* "OptimizedPhaseCrossCorrelation.pyx":103
  *     cdef int window_start = window_size / 2
  * 
- *     cdef int[:] x_arrange = np.arange(window_start, x_max, window_step, dtype=DTYPE).astype('int')             # <<<<<<<<<<<<<<
- *     cdef int[:] y_arrange = np.arange(window_start, y_max, window_step, dtype=DTYPE).astype('int')
+ *     cdef int[:] x_arrange = np.arange(window_start, x_max, window_step, dtype=DTYPE).astype('intc')             # <<<<<<<<<<<<<<
+ *     cdef int[:] y_arrange = np.arange(window_start, y_max, window_step, dtype=DTYPE).astype('intc')
  * 
  */
   __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 103, __pyx_L1_error)
@@ -4193,7 +4193,7 @@ static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlati
       __Pyx_DECREF_SET(__pyx_t_1, function);
     }
   }
-  __pyx_t_3 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_4, __pyx_n_s_int) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_n_s_int);
+  __pyx_t_3 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_4, __pyx_n_s_intc) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_n_s_intc);
   __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
   if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 103, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
@@ -4206,8 +4206,8 @@ static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlati
 
   /* "OptimizedPhaseCrossCorrelation.pyx":104
  * 
- *     cdef int[:] x_arrange = np.arange(window_start, x_max, window_step, dtype=DTYPE).astype('int')
- *     cdef int[:] y_arrange = np.arange(window_start, y_max, window_step, dtype=DTYPE).astype('int')             # <<<<<<<<<<<<<<
+ *     cdef int[:] x_arrange = np.arange(window_start, x_max, window_step, dtype=DTYPE).astype('intc')
+ *     cdef int[:] y_arrange = np.arange(window_start, y_max, window_step, dtype=DTYPE).astype('intc')             # <<<<<<<<<<<<<<
  * 
  *     cdef Py_ssize_t x, y
  */
@@ -4257,7 +4257,7 @@ static PyObject *__pyx_pf_30OptimizedPhaseCrossCorrelation_phase_cross_correlati
       __Pyx_DECREF_SET(__pyx_t_5, function);
     }
   }
-  __pyx_t_3 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_7, __pyx_n_s_int) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_n_s_int);
+  __pyx_t_3 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_7, __pyx_n_s_intc) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_n_s_intc);
   __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
   if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 104, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
@@ -19594,8 +19594,8 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_id, __pyx_k_id, sizeof(__pyx_k_id), 0, 0, 1, 1},
   {&__pyx_n_s_ifftn, __pyx_k_ifftn, sizeof(__pyx_k_ifftn), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
-  {&__pyx_n_s_int, __pyx_k_int, sizeof(__pyx_k_int), 0, 0, 1, 1},
   {&__pyx_n_s_int16, __pyx_k_int16, sizeof(__pyx_k_int16), 0, 0, 1, 1},
+  {&__pyx_n_s_intc, __pyx_k_intc, sizeof(__pyx_k_intc), 0, 0, 1, 1},
   {&__pyx_n_s_itemsize, __pyx_k_itemsize, sizeof(__pyx_k_itemsize), 0, 0, 1, 1},
   {&__pyx_kp_s_itemsize_0_for_cython_array, __pyx_k_itemsize_0_for_cython_array, sizeof(__pyx_k_itemsize_0_for_cython_array), 0, 0, 1, 0},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},

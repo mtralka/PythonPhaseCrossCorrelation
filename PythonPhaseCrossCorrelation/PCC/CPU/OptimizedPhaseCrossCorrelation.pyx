@@ -100,8 +100,8 @@ def phase_cross_correlation(int[:, :] reference_arr, int[:, :] moving_arr, int w
 
     cdef int window_start = window_size / 2
 
-    cdef int[:] x_arrange = np.arange(window_start, x_max, window_step, dtype=DTYPE).astype('int')
-    cdef int[:] y_arrange = np.arange(window_start, y_max, window_step, dtype=DTYPE).astype('int')
+    cdef int[:] x_arrange = np.arange(window_start, x_max, window_step, dtype=DTYPE).astype('intc')
+    cdef int[:] y_arrange = np.arange(window_start, y_max, window_step, dtype=DTYPE).astype('intc')
 
     cdef Py_ssize_t x, y
     cdef int row_start, row_end

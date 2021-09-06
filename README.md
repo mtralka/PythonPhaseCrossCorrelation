@@ -56,7 +56,7 @@ unless specified, `outfile_dir` is the absolute dir of `main.py` and `outfile_na
     cd PythonPhaseCrossCorrelation/tests
     pytest
 
-Validates PCC results against benchmarked data
+Validates PPCC results against benchmarked truth data
 
 ## ToDo
 

@@ -4,11 +4,13 @@ LABEL maintainer="Matthew Tralka"
 
 WORKDIR /PPCC
 
-COPY environment2.yml .environment.yml
-RUN conda env create -f environment.yml
-RUN echo "source activate PPCC" > ~/.bashrc
-ENV PATH /opt/conda/envs/PPCC/bin:$PATH
-# RUN /bin/bash -c "source activate PPCC"
+COPY environment2.yml .
+RUN CONDA_RESTORE_FREE_CHANNEL=1 conda env create -f environment2.yml
+
+RUN echo "conda activate PPCC" >> ~/.bashrc
+SHELL ["/bin/bash", "--login", "-c"]
+
+
 
 COPY . .
 
