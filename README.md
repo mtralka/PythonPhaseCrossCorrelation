@@ -47,6 +47,24 @@ unless specified, `outfile_dir` is the absolute dir of `main.py` and `outfile_na
     cd PythonPhaseCrossCorrelation/PCC/CPU
     python setup.py build_ext --inplace
 
+    ### Windows Compiling
+
+    Users on Windows-based machines will receive the error
+
+        error: Unable to find vcvarsall.bat
+
+    if they do not have the required Build Tools for Visual Studio 2019.
+
+    To solve this dependency issue you can either
+
+    - install [Build Tools for Visual Studio 2019](https://visualstudio.microsoft.com/downloads/). Note you only need the `Build Tools` and not the complete Visual Studio IDE
+
+    - (**preferred**) Use [Chocolatey](https://chocolatey.org), the Window package manager.
+
+        - Chocolatey install instructions - https://chocolatey.org/install
+        - Built Tools Install - https://community.chocolatey.org/packages/visualstudio2019-workload-vctools
+            `choco install visualstudio2019-workload-vctools`
+
 ## GPU-based PCC algorithm
 
     not yet implemented
