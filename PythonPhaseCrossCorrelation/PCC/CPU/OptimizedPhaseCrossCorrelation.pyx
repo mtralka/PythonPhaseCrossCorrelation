@@ -1,9 +1,9 @@
 """
 
- @title: Optimized Python Phase Cross Correlation
- @author: Matthew Tralka
- @date: May 2021
- @version: 0.1
+@title: Optimized Python Phase Cross Correlation
+@author: Matthew Tralka
+@date: September 2021
+@version: 1.0
 
     Algorithm References
     .. [0] Harris CR, Millman KJ, van der Walt SJ, Gommers R, Virtanen P, Cournapeau D, et al.

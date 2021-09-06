@@ -1,3 +1,8 @@
+# @title: Optimized Python Phase Cross Correlation
+# @author: Matthew Tralka
+# @date: September 2021
+# @version: 1.0
+
 
 version: "3"
 services:
@@ -5,5 +10,10 @@ services:
     build:
       context: ./PythonPhaseCrossCorrelation
       dockerfile: dockerfile
+    ports:
+     - 8888:8888
+    environment:
+      - JUPYTER_TOKEN=PPCC
     volumes:
-      - ./PythonPhaseCrossCorrelation:/PCC/PythonPhaseCrossCorrelation
+      - ./PythonPhaseCrossCorrelation:/PythonPhaseCrossCorrelation
+      # ADD MORE AS NEEDED

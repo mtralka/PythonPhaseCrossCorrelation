@@ -15,10 +15,26 @@ Optimized CPU & GPU implementation of phase cross correlation. Target usage for 
 
 ## Dependencies
 
-This project uses `conda`. Please create and activate the required conda environment using the `environment.yml` found in `PythonPhaseCrossCorrelation/environment.yml`
+This project uses `conda`. To use locally, please create and activate the required conda environment using the `environment.yml` found in `PythonPhaseCrossCorrelation/environment.yml`
 
     conda env create -f environment.yml
     conda activate PPCC
+
+## Docker
+
+For convenience, this project include a dockerfile and docker-compose for consistent and worry-free development across multiple machine.
+
+With `docker` and `docker-compose` installed:
+
+    docker-compose -f "docker-compose.yml" up -d --build
+
+A Jupyter Notebook instance will then be accessible at `http://localhost:8888/?token=PPCC`
+
+- `/PythonPhaseCrossCorrelation/` is live-mounted to `/PCC/PythonPhaseCrossCorrelation`
+- Port `8888` passed through
+- Jupyter Notebook token `PPCC`
+
+To access local-files in the docker container mount addition volumes as needed
 
 ## CLI
 
@@ -39,6 +55,8 @@ This project uses `conda`. Please create and activate the required conda environ
         reference_image_path,
         moving_image_path
     )
+
+see `/ExampleNotebook.ipynb`
 
 unless specified, `outfile_dir` is the absolute dir of `main.py` and `outfile_name` is `parallax_{ISOTIMESTAMP}`
 

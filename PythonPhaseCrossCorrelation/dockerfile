@@ -2,13 +2,26 @@ FROM continuumio/miniconda3
 
 LABEL maintainer="Matthew Tralka"
 
-WORKDIR /PPCC
+WORKDIR /PythonPhaseCrossCorrelation
 
 COPY environment.yml .
+
 RUN CONDA_RESTORE_FREE_CHANNEL=1 conda env create -f environment.yml
 
-SHELL ["conda", "run", "-n", "PPCC", "/bin/bash", "-c"]
+RUN apt-get update -y && \
+    apt-get upgrade -y && \
+    apt-get install -y \
+    python-dev python3-dev \
+    build-essential libxslt-dev \
+    libffi-dev libssl-dev \
+    python-setuptools
 
 COPY . .
 
-ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "PPCC", "python", "main.py"]
+RUN cd PCC/CPU && \
+    conda run --no-capture-output -n PPCC \
+    python setup.py build_ext --inplace
+
+CMD ["conda", "run", "--no-capture-output", "-n", \
+    "PPCC", "jupyter", "notebook", "--allow-root", \
+    "--no-browser", "--ip=0.0.0.0"]
