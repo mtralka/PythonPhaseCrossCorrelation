@@ -15,7 +15,7 @@ Optimized CPU & GPU implementation of phase cross correlation. Target usage for 
 
 ## Dependencies
 
-This project uses `conda`. Please create and activate the required conda command using the `environment.yml` found in `PythonPhaseCrossCorrelation/environment.yml`
+This project uses `conda`. Please create and activate the required conda environment using the `environment.yml` found in `PythonPhaseCrossCorrelation/environment.yml`
 
     conda env create -f environment.yml
     conda activate PPCC
