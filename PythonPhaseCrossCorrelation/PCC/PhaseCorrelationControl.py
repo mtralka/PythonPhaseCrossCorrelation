@@ -92,7 +92,7 @@ class PhaseCorrelationControl:
         window_step: int = 6,
         outfile_driver: str = "GTiff",
         no_data: float = -9999.0,
-        method: Union[str, PCCMethods] = PCCMethods.cpu
+        method: Union[str, PCCMethods] = 'CPU'
     ):
 
         path_inputs: Dict[Union[Path, str], str] = {
