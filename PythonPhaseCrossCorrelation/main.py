@@ -7,22 +7,15 @@
 
 """
 from datetime import datetime
-from enum import Enum
 from pathlib import Path
 from typing import Optional
 
 import typer
 
 from PCC import PhaseCorrelationControl
-
+from PythonPhaseCrossCorrelation.PCC.PhaseCorrelationControl import PCCMethods
 
 app = typer.Typer()
-
-
-class PCCMethods(str, Enum):
-    cpu = "CPU"
-    gpu = "GPU"
-
 
 def index_callback(value: int) -> int:
     if value < -1:

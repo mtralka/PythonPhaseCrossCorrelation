@@ -7,11 +7,13 @@
 
 """
 
+from PythonPhaseCrossCorrelation import PCC
 from datetime import datetime
 from pathlib import Path
 import re
 from typing import Dict
 from typing import Union
+from enum import Enum
 import warnings
 
 import gdal
@@ -20,6 +22,21 @@ import numpy as np
 
 from .CPU.OptimizedPhaseCrossCorrelation import phase_cross_correlation as pcc_cpu
 
+class ExtendedEnum(Enum):
+
+    @classmethod
+    def list(cls):
+        return list(map(lambda c: c.value, cls))
+    
+    @classmethod
+    def has_value(cls, value):
+        return value in cls._value2member_map_ 
+    
+
+
+class PCCMethods(str, ExtendedEnum):
+    cpu = "CPU"
+    gpu = "GPU"
 
 class PhaseCorrelationControl:
     """
@@ -53,7 +70,7 @@ class PhaseCorrelationControl:
         GDAL driver type. Default `GTiff`
     `no_data` : float
         NODATA value for GDAl. Default `-9999.0`
-    `method` : str
+    `method` : str or PCCMethods
         Processing type - `CPU` or `GPU`. Default `CPU`
 
     Methods
@@ -76,7 +93,7 @@ class PhaseCorrelationControl:
         window_step: int = 6,
         outfile_driver: str = "GTiff",
         no_data: float = -9999.0,
-        method: str = "CPU"
+        method: Union[str, PCCMethods] = PCCMethods.cpu
     ):
 
         path_inputs: Dict[Union[Path, str], str] = {
@@ -84,8 +101,6 @@ class PhaseCorrelationControl:
             moving_img: "moving_path",
             outfile_dir: "outfile_dir"
         }
-
-        method_inputs: list = ["CPU", "GPU"]
 
         for path, name in path_inputs.items():
 
@@ -104,15 +119,21 @@ class PhaseCorrelationControl:
 
             setattr(self, name, path)
 
-        # TODO
-        if method.strip().upper() == 'GPU':
-            raise NotImplementedError("GPU not implemented. Use CPU")
-
-        if method.strip().upper() in method_inputs:
-            self.method = method.strip().upper()
+        if isinstance(method, ExtendedEnum):
+            if method in PCCMethods:
+                self.method = PCCMethods[method]
+            else:
+                raise AttributeError(
+                f"{method} enum not recognized. Select from {PCCMethods.list()}")
+        elif isinstance(method, str):
+            if PCCMethods.has_value(method.upper().strip()):
+                self.method = PCCMethods[method.lower().strip()]
+            else:
+                raise AttributeError(
+                f"{method} string not recognized. Select from {PCCMethods.list()}")
         else:
             raise AttributeError(
-                f"{method} not recognized. Select from {', '.join(method_inputs)}")
+                f"{method} not recognized. Select from {PCCMethods.list()}")
 
         self.outfile_name: str = self._get_valid_filename(outfile_name)
         self.upsample: int = upsample
@@ -127,10 +148,15 @@ class PhaseCorrelationControl:
         self.no_data: float = float(no_data)
         self.total_shift = None
 
-        if self.upsample > 1:
+        if self.upsample > 1 and \
+            self.method == PCCMethods.cpu:
             warnings.warn(
                 "CPU upsampling not implemented. Performance will be impacted",
                 Warning)
+
+        # TODO
+        if self.method.value == PCCMethods.gpu:
+            raise NotImplementedError("GPU not implemented. Use CPU")
 
         self.run()
 
@@ -181,7 +207,7 @@ class PhaseCorrelationControl:
         ].astype("intc")
 
     def _process_correlation(self):
-        if self.method.upper() == "CPU":
+        if self.method == PCCMethods.cpu:
             total_shift = pcc_cpu(
                 self.reference_arr,
                 self.moving_arr,
@@ -190,7 +216,7 @@ class PhaseCorrelationControl:
                 self.no_data,
                 self.upsample,
             )
-        elif self.method.upper() == "GPU":
+        elif self.method == PCCMethods.gpu:
             raise NotImplementedError("GPU not implemented")
         else:
             raise AttributeError("`method` must be `CPU` or `GPU`")
