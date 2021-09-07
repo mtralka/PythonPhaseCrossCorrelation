@@ -7,7 +7,6 @@
 
 """
 
-from PythonPhaseCrossCorrelation import PCC
 from datetime import datetime
 from pathlib import Path
 import re

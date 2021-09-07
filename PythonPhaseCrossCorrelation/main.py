@@ -13,7 +13,7 @@ from typing import Optional
 import typer
 
 from PCC import PhaseCorrelationControl
-from PythonPhaseCrossCorrelation.PCC.PhaseCorrelationControl import PCCMethods
+from PCC.PhaseCorrelationControl import PCCMethods
 
 app = typer.Typer()
 
