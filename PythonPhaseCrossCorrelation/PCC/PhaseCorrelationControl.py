@@ -8,34 +8,35 @@
 """
 
 from datetime import datetime
+from enum import Enum
 from pathlib import Path
 import re
 from typing import Dict
 from typing import Union
-from enum import Enum
 import warnings
 
 import gdal
 import gdalconst
 import numpy as np
 
-from .CPU.OptimizedPhaseCrossCorrelation import phase_cross_correlation as pcc_cpu
+from .CPU import phase_cross_correlation as pcc_cpu
+
 
 class ExtendedEnum(Enum):
 
     @classmethod
     def list(cls):
         return list(map(lambda c: c.value, cls))
-    
+
     @classmethod
     def has_value(cls, value):
-        return value in cls._value2member_map_ 
-    
+        return value in cls._value2member_map_
 
 
 class PCCMethods(str, ExtendedEnum):
     cpu = "CPU"
     gpu = "GPU"
+
 
 class PhaseCorrelationControl:
     """

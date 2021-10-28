@@ -1,1 +1,1 @@
-from PythonPhaseCrossCorrelation.PCC import PhaseCorrelationControl
+from .PCC import PhaseCorrelationControl
