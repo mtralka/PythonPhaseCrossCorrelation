@@ -16,9 +16,9 @@ RUN apt-get update -y && \
     libffi-dev libssl-dev \
     python-setuptools
 
-COPY . .
+COPY . ./PythonPhaseCrossCorrelation/
 
-RUN cd PCC/CPU && \
+RUN cd PythonPhaseCrossCorrelation/PCC/CPU && \
     conda run --no-capture-output -n PPCC \
     python setup.py build_ext --inplace
 

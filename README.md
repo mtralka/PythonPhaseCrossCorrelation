@@ -5,13 +5,13 @@ Optimized CPU & GPU implementation of phase cross correlation. Target usage for 
 ## Comparison
 
 |                              | Time (seconds) | Improvement | Note                  |
-|------------------------------|:--------------:|-------------|-----------------------|
-| Scikit-Image - No Upscaling  |       307        |             |                       |
-| .this - No Upscaling         |       74       |     **414%**    |                       |
+| ---------------------------- | :------------: | ----------- | --------------------- |
+| Scikit-Image - No Upscaling  |      307       |             |                       |
+| .this - No Upscaling         |       74       | **414%**    |                       |
 | Scikit-Image - 100 Upscaling |      1020      |             |                       |
-|     .this - 100 Upscaling    |       540      |     **188%**    | *Not fully optimized* |
+| .this - 100 Upscaling        |      540       | **188%**    | _Not fully optimized_ |
 
-*as benchmarked on an i7-4790K @ 4.0 GHz, 16GB ram*
+_as benchmarked on an i7-4790K @ 4.0 GHz, 16GB ram_
 
 ## Dependencies
 
@@ -30,7 +30,7 @@ With `docker` and `docker-compose` installed:
 
 A Jupyter Notebook instance will then be accessible at `http://localhost:8888/?token=PPCC`
 
-- `/PythonPhaseCrossCorrelation/` is live-mounted to `/PythonPhaseCrossCorrelation/`
+- `/PythonPhaseCrossCorrelation/` is live-mounted to `/PythonPhaseCrossCorrelation/PythonPhaseCrossCorrelation`
 - Port `8888` passed through
 - Jupyter Notebook token `PPCC`
 
@@ -40,7 +40,7 @@ To access local-files in the docker container mount addition volumes as needed
 
     python PythonPhaseCrossCorrelation/main.py --help
 
- explicitly
+explicitly
 
     python PythonPhaseCrossCorrelation/main.py [REFERENCE IMAGE PATH] [MOVING IMAGE PATH] **OPTIONS
 
@@ -49,10 +49,10 @@ To access local-files in the docker container mount addition volumes as needed
 ## Object
 
     from PCC import PhaseCorrelationControl
-    
+
     reference_image_path: Union[str, Path] = "path/to/reference/image"
     moving_image_path: Union[str, Path] = "path/to/moving/image"
-    
+
     PhaseCorrelationControl(
         reference_image_path,
         moving_image_path
@@ -81,10 +81,10 @@ To solve this dependency issue you can either
 
 - (**preferred**) Use [Chocolatey](https://chocolatey.org), the Window package manager.
 
-    - Chocolatey install instructions - https://chocolatey.org/install
-    - Built Tools Install - https://community.chocolatey.org/packages/visualstudio2019-workload-vctools
+  - Chocolatey install instructions - https://chocolatey.org/install
+  - Built Tools Install - https://community.chocolatey.org/packages/visualstudio2019-workload-vctools
 
-        `choco install visualstudio2019-workload-vctools`
+    `choco install visualstudio2019-workload-vctools`
 
 ## GPU-based PCC algorithm
 

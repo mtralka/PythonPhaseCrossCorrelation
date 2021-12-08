@@ -15,5 +15,5 @@ services:
     environment:
       - JUPYTER_TOKEN=PPCC
     volumes:
-      - ./PythonPhaseCrossCorrelation:/PythonPhaseCrossCorrelation
+      - ./PythonPhaseCrossCorrelation:/PythonPhaseCrossCorrelation/PythonPhaseCrossCorrelation
       # ADD MORE AS NEEDED
