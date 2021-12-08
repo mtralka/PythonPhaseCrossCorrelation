@@ -64,8 +64,10 @@ unless specified, `outfile_dir` is the absolute dir of `main.py` and `outfile_na
 
 ## ReCompile CPU-based PCC algorithm
 
+```
 cd PythonPhaseCrossCorrelation/PCC/CPU
 python setup.py build_ext --inplace
+```
 
 ### Windows Compiling
 
