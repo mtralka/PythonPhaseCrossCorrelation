@@ -9,33 +9,22 @@
 
 from datetime import datetime
 from enum import Enum
+from enum import auto
 from pathlib import Path
 import re
-from typing import Dict
+from typing import Any
+from typing import Optional
 from typing import Union
 import warnings
 
-import gdal
-import gdalconst
 import numpy as np
 
 from .CPU import phase_cross_correlation as pcc_cpu
 
 
-class ExtendedEnum(Enum):
-
-    @classmethod
-    def list(cls):
-        return list(map(lambda c: c.value, cls))
-
-    @classmethod
-    def has_value(cls, value):
-        return value in cls._value2member_map_
-
-
-class PCCMethods(str, ExtendedEnum):
-    cpu = "CPU"
-    gpu = "GPU"
+class PCCMethods(Enum):
+    CPU = auto()
+    GPU = auto()
 
 
 class PhaseCorrelationControl:
@@ -44,11 +33,11 @@ class PhaseCorrelationControl:
 
     Attributes
     ----------
-    `reference_img` : str or Path
-        Path to desired reference image
-    `moving_img` : str or Path
-        Path to desired moving image
-    `outfile_dir` : str or Path
+    `reference_img` : str | Path | np.ndarray
+        Path to desired reference image OR np.ndarray
+    `moving_img` : str | Path | np.ndarray
+        Path to desired moving image OR np.ndarray
+    `outfile_dir` : str | Path
         Path to desired output directory. Default parent directory
     `outfile_name` : str
         Name of outfile. Default to iso timestamp
@@ -72,16 +61,30 @@ class PhaseCorrelationControl:
         NODATA value for GDAl. Default `-9999.0`
     `method` : str or PCCMethods
         Processing type - `CPU` or `GPU`. Default `CPU`
+    `reference_band` : int
+        Reference band to read from `reference_img`. Default 1
+    `moving_band` : int
+        Moving band to read from `moving_img`. Default 1
+    `auto_save` : bool
+        If true, saves results immediately to `outfile_dir`/`outfile_name`. False, does not
+    `out_geo_transform` : tuple (valid geotransform)
+        Must be given to `save()` results if  `reference_img` and `moving_img` are passed as np.ndarrays
+    `out_projection_ref` : valid projection ref
+        Must be given to `save()` results if  `reference_img` and `moving_img` are passed as np.ndarrays
 
     Methods
     -------
     `run()`
-        Run all private class methods for PCC
+        Run phase cross correlation
+    `save()`
+        Save results from phase cross correlation. `out_geo_transform` and `out_projection_ref` must be
+        manually given if `reference_img` and `moving_img` are given as np.ndarrays
     """
+
     def __init__(
         self,
-        reference_img: Union[Path, str],
-        moving_img: Union[Path, str],
+        reference_img: Union[Path, str, np.ndarray],
+        moving_img: Union[Path, str, np.ndarray],
         outfile_dir: Union[Path, str] = Path(__file__).parent.absolute(),
         outfile_name: str = f"parallax_{datetime.now().isoformat(timespec='minutes')}",
         upsample: int = 1,
@@ -93,47 +96,74 @@ class PhaseCorrelationControl:
         window_step: int = 6,
         outfile_driver: str = "GTiff",
         no_data: float = -9999.0,
-        method: Union[str, PCCMethods] = 'CPU'
+        method: Union[str, PCCMethods] = "CPU",
+        reference_band: int = 1,
+        moving_band: int = 1,
+        auto_save: bool = False,
+        out_geo_transform: tuple = None,
+        out_projection_ref: Any = None,
     ):
 
-        path_inputs: Dict[Union[Path, str], str] = {
-            reference_img: "reference_path",
-            moving_img: "moving_path",
-            outfile_dir: "outfile_dir"
-        }
+        ##
+        # if NP arrays --> set
+        # elif if given Path/str --> intake
+        ##
+        if isinstance(reference_img, np.ndarray) and isinstance(moving_img, np.ndarray):
+            self.reference_arr = reference_img
+            self.moving_arr = moving_img
 
-        for path, name in path_inputs.items():
+            self.moving_path = None
+            self.reference_path = None
 
-            if isinstance(path, str):
-                path = Path(path)
+            if not out_geo_transform or not out_projection_ref:
+                warnings.warn(
+                    "`out_geo_transform` and `out_projection_ref` not given - you are unable to `save()` results",
+                    Warning,
+                )
 
-            if not path.exists():
-                raise OSError(f"{path} not found")
+        elif isinstance(reference_img, (Path, str)) and isinstance(
+            moving_img, (Path, str)
+        ):
+            self.reference_path: Path = self._valdiate_path(
+                reference_img, check_exists=True, check_is_file=True
+            )
 
-            if name.endswith("path"):
-                if not path.is_file():
-                    raise FileNotFoundError(f"{path} file not found")
-            elif name.endswith("dir"):
-                if not path.is_dir():
-                    raise NotADirectoryError(f"{path} is not a directory")
+            self.moving_path: Path = self._valdiate_path(
+                moving_img, check_exists=True, check_is_file=True
+            )
 
-            setattr(self, name, path)
+            self.reference_band = reference_band
+            self.moving_band = moving_band
 
-        if isinstance(method, ExtendedEnum):
-            if method in PCCMethods:
-                self.method = PCCMethods[method]
-            else:
-                raise AttributeError(
-                f"{method} enum not recognized. Select from {PCCMethods.list()}")
-        elif isinstance(method, str):
-            if PCCMethods.has_value(method.upper().strip()):
-                self.method = PCCMethods[method.lower().strip()]
-            else:
-                raise AttributeError(
-                f"{method} string not recognized. Select from {PCCMethods.list()}")
+            self.reference_arr = self._read_array(self.reference_path, reference_band)
+            self.moving_arr = self._read_array(self.moving_path, reference_band)
         else:
-            raise AttributeError(
-                f"{method} not recognized. Select from {PCCMethods.list()}")
+            raise ValueError(
+                "`reference_img` and `moving_img` must be given as a Path/str or np.ndaray"
+            )
+
+        ##
+        # If set, validate outfile_dir
+        ##
+        if outfile_dir is not None:
+            self.outfile_dir = self._valdiate_path(
+                outfile_dir, check_exists=True, check_is_file=False, check_is_dir=True
+            )
+
+        ##
+        # Validate `method` as str or PCCMethods Enum
+        ##
+        for pcc_method in PCCMethods.__members__.values():
+            if method == pcc_method:
+                self.method = method
+                break
+            elif isinstance(method, str) and method.upper().strip() == pcc_method.name:
+                self.method = PCCMethods[method.upper().strip()]
+                break
+            else:
+                raise AttributeError(
+                    f"{method} not recognized. Select from {','.join([item.name for item in PCCMethods.__members__.values()])}"
+                )
 
         self.outfile_name: str = self._get_valid_filename(outfile_name)
         self.upsample: int = upsample
@@ -144,70 +174,110 @@ class PhaseCorrelationControl:
         self.window_size: int = window_size
         self.window_step: int = window_step
         self.outfile_driver: str = outfile_driver
-        self.outfile_type = gdalconst.GDT_Int16
         self.no_data: float = float(no_data)
+        self.auto_save: bool = auto_save
+        self.out_geo_transform: tuple = out_geo_transform
+        self.out_projection_ref: Any = out_projection_ref
         self.total_shift = None
 
-        if self.upsample > 1 and \
-            self.method == PCCMethods.cpu:
+        if self.upsample > 1 and self.method == PCCMethods.CPU:
             warnings.warn(
-                "CPU upsampling not implemented. Performance will be impacted",
-                Warning)
+                "CPU upsampling not implemented. Performance will be impacted", Warning
+            )
 
-        # TODO
-        if self.method.value == PCCMethods.gpu:
+        if self.method.value == PCCMethods.GPU:
             raise NotImplementedError("GPU not implemented. Use CPU")
 
         self.run()
 
-    def run(self) -> None:
+    @staticmethod
+    def _valdiate_path(
+        path: Union[str, Path],
+        check_exists: bool = False,
+        check_is_file: bool = False,
+        check_is_dir=False,
+    ) -> Path:
+
+        valid_path: Path = Path(path) if isinstance(path, str) else path
+
+        if check_exists:
+            if not valid_path.exists():
+                raise FileExistsError(f"{path} must exist")
+
+        if check_is_file:
+            if not valid_path.is_file():
+                raise FileNotFoundError(f"{path} must be a file")
+
+        if check_is_dir:
+            if not valid_path.is_dir():
+                raise ValueError(f"{path} must be a directory")
+
+        return valid_path
+
+    def run(self, auto_save: Optional[bool] = None) -> None:
         """
-        Time and run all private methods required for PCC
+        Time and run PhaseCrossCorrelation
 
         """
-
+        auto_save = self.auto_save if auto_save is None else auto_save
         start = datetime.now()
-        self._intake_files()
+        self._process_arrays()
         self._process_correlation()
-        self._save_results()
+
+        if auto_save:
+            self.save()
         print(f"Complete in: {datetime.now() - start}")
 
-    def _intake_files(self):
+    @staticmethod
+    def _read_array(
+        file: Union[str, Path], band: int = 1, dtype: str = "int16"
+    ) -> np.ndarray:
         """
-        Opens and extracts arrays from target `reference` and `moving` files
+        Opens and extract array from `file` using `band` and `dtype`. Requires `gdal`
+
+        """
+        try:
+            import gdal
+        except ImportError:
+            print("`gdal` must be installed to read arrays")
+
+        filename: Path = file if isinstance(file, Path) else Path(file)
+
+        if not filename.is_file():
+            raise FileNotFoundError("`file` not found")
+
+        file_ds = gdal.Open(str(filename))
+
+        if file_ds is None:
+            raise FileNotFoundError("GDAL failed to open `file`")
+
+        file_arr: np.ndarray = np.array(
+            file_ds.GetRasterBand(band).ReadAsArray()
+        ).astype(dtype)
+
+        file_ds = None
+
+        return file_arr
+
+    def _process_arrays(self):
+        """
+        Extracts target area from `reference_arr` and `moving_arr`
 
         """
 
-        def _extract_array(
-            file: Path, band: int = 1, d_type: str = "int16"
-        ) -> np.ndarray:
-            file = str(file)
-            file_ds = gdal.Open(file)
-            file_arr: np.ndarray = np.array(
-                file_ds.GetRasterBand(band).ReadAsArray()
-            ).astype(d_type)
-            file_ds = None
-            return file_arr
+        if self.reference_arr.shape != self.moving_arr.shape:
+            raise ValueError("`reference_arr` and `moving_arr` must be the same shape")
 
-        reference_arr = _extract_array(self.reference_path)
-        moving_arr = _extract_array(self.moving_path)
-
-        assert (
-            reference_arr.shape == moving_arr.shape
-        ), "`reference` and `moving` must be the same shape"
-
-        self.reference_arr, self.moving_arr = reference_arr, moving_arr
-
-        self.reference_arr = reference_arr[
-            self.y0: self.y1, self.x0: self.x1
+        self.reference_arr = self.reference_arr[
+            self.y0 : self.y1, self.x0 : self.x1
         ].astype("intc")
 
-        self.moving_arr = moving_arr[
-            self.y0: self.y1, self.x0: self.x1
-        ].astype("intc")
+        self.moving_arr = self.moving_arr[self.y0 : self.y1, self.x0 : self.x1].astype(
+            "intc"
+        )
 
     def _process_correlation(self):
-        if self.method == PCCMethods.cpu:
+        if self.method == PCCMethods.CPU:
             total_shift = pcc_cpu(
                 self.reference_arr,
                 self.moving_arr,
@@ -216,7 +286,7 @@ class PhaseCorrelationControl:
                 self.no_data,
                 self.upsample,
             )
-        elif self.method == PCCMethods.gpu:
+        elif self.method == PCCMethods.GPU:
             raise NotImplementedError("GPU not implemented")
         else:
             raise AttributeError("`method` must be `CPU` or `GPU`")
@@ -228,11 +298,17 @@ class PhaseCorrelationControl:
 
         self.total_shift = total_shift
 
-    def _save_results(self):
+    def save(self):
         """
-        Saves `total_shift` array to disk
+        Saves `total_shift` array to disk. Requires `gdal`
 
         """
+
+        try:
+            import gdal
+            import gdalconst
+        except ImportError:
+            print("`gdal` must be installed to read arrays")
 
         out_driver = gdal.GetDriverByName(self.outfile_driver)
         out_ds = out_driver.Create(
@@ -240,11 +316,29 @@ class PhaseCorrelationControl:
             self.total_shift.shape[1],
             self.total_shift.shape[0],
             1,
-            self.outfile_type,
+            gdalconst.GDT_Int16,
         )
 
-        reference_ds = gdal.Open(str(self.reference_path))
-        geo_transform = reference_ds.GetGeoTransform()
+        geo_transform: tuple
+        projection_ref: Any
+        if self.reference_path is not None or self.moving_path is not None:
+            reference_ds = gdal.Open(
+                str(
+                    self.reference_path
+                    if self.reference_path is not None
+                    else self.moving_path
+                )
+            )
+            geo_transform = reference_ds.GetGeoTransform()
+            projection_ref = reference_ds.GetProjectionRef()
+            reference_ds = None
+        elif self.out_geo_transform is None or self.out_projection_ref is None:
+            raise ValueError(
+                "`reference_path` or `moving_path` or (`out_geo_transform` and `out_projection_ref`) must exist to `save()` results"
+            )
+        else:
+            geo_transform = self.out_geo_transform
+            projection_ref = self.out_projection_ref
 
         x_offset = geo_transform[0] + geo_transform[1] * self.x0
         y_offset = geo_transform[3] + geo_transform[5] * self.y0
@@ -261,11 +355,11 @@ class PhaseCorrelationControl:
         )
 
         out_ds.SetGeoTransform(geo_transform_subset)
-        out_ds.SetProjection(reference_ds.GetProjectionRef())
+        out_ds.SetProjection(projection_ref)
         out_ds.GetRasterBand(1).WriteArray(self.total_shift.astype("int16"))
         out_ds.GetRasterBand(1).SetNoDataValue(self.no_data)
 
-        reference_ds, out_ds = None, None
+        out_ds = None
 
         print(np.mean(self.total_shift))
 
@@ -275,9 +369,9 @@ class PhaseCorrelationControl:
         Returns sanitizied filename. Credit @ Django
 
         """
-        washed = name.strip().replace(' ', '_')
-        washed = re.sub(r'(?u)[^-\w.]', '', washed)
-        if washed in {'', '.', '..'}:
+        washed = name.strip().replace(" ", "_")
+        washed = re.sub(r"(?u)[^-\w.]", "", washed)
+        if washed in {"", ".", ".."}:
             raise ValueError(f"Could not sanitize ouput name {name}")
         return washed
 

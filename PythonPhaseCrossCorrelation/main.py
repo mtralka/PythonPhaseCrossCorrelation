@@ -13,9 +13,11 @@ from typing import Optional
 import typer
 
 from PCC import PhaseCorrelationControl
-from PCC.PhaseCorrelationControl import PCCMethods
+# from PCC.PhaseCorrelationControl import PCCMethods
+
 
 app = typer.Typer()
+
 
 def index_callback(value: int) -> int:
     if value < -1:
@@ -45,7 +47,7 @@ def main(
         writable=True,
         readable=True,
         resolve_path=True,
-        help="Path to reference image"
+        help="Path to reference image",
     ),
     moving_path: Path = typer.Argument(
         ...,
@@ -55,7 +57,7 @@ def main(
         writable=True,
         readable=True,
         resolve_path=True,
-        help="Path to moving image"
+        help="Path to moving image",
     ),
     outfile_dir: Path = typer.Option(
         Path(__file__).parent.absolute(),
@@ -67,64 +69,77 @@ def main(
         writable=True,
         readable=True,
         resolve_path=True,
-        help="Path to desired output directory"
+        help="Path to desired output directory",
     ),
     outfile_name: str = typer.Option(
         f"parallax_{datetime.now().isoformat(timespec='minutes').replace(':', '.')}",
-        "--out-name", "-on",
-        help="Desired output name"
+        "--out-name",
+        "-on",
+        help="Desired output name",
     ),
     col_start: Optional[int] = typer.Option(
         -1,
-        "--col-start", "-cs", "-x0",
+        "--col-start",
+        "-cs",
+        "-x0",
         show_default=False,
         help="Upper left starting column - X0",
-        callback=index_callback
+        callback=index_callback,
     ),
     col_end: Optional[int] = typer.Option(
         -1,
-        "--col-end", "-ce", "-x1",
+        "--col-end",
+        "-ce",
+        "-x1",
         show_default=False,
         help="Lower right ending column - X1",
-        callback=index_callback
+        callback=index_callback,
     ),
     row_start: Optional[int] = typer.Option(
         -1,
-        "--row-start", "-rs", "-y0",
+        "--row-start",
+        "-rs",
+        "-y0",
         show_default=False,
         help="Upper right starting row - Y0",
-        callback=index_callback
+        callback=index_callback,
     ),
     row_end: Optional[int] = typer.Option(
         -1,
-        "--row-end", "-re", "-y1",
+        "--row-end",
+        "-re",
+        "-y1",
         show_default=False,
         help="Lower right ending row - Y1",
-        callback=index_callback
+        callback=index_callback,
     ),
     window_size: Optional[int] = typer.Option(
         64,
-        "--window-size", "-wsize",
+        "--window-size",
+        "-wsize",
         help="Correlation window size",
         callback=window_option_callback,
     ),
     window_step: Optional[int] = typer.Option(
         6,
-        "--window-step", "-wstep",
+        "--window-step",
+        "-wstep",
         help="Correlation window step size",
-        callback=window_option_callback
+        callback=window_option_callback,
     ),
     upsample: Optional[int] = typer.Option(
         1,
-        "--upsample", "-up",
+        "--upsample",
+        "-up",
         help="Register image within 1 / n of a pixel",
-        callback=upsample_callback
-    ),
-    method: PCCMethods = typer.Option(
-        PCCMethods.cpu,
-        "--method", "-m",
-        help="Compute method for PCC",
+        callback=upsample_callback,
     )
+    # method: PCCMethods = typer.Option(
+    #     PCCMethods.CPU,
+    #     "--method",
+    #     "-m",
+    #     help="Compute method for PCC",
+    # ),
 ):
     PhaseCorrelationControl(
         reference_path,
@@ -138,7 +153,8 @@ def main(
         window_size=window_size,
         window_step=window_step,
         upsample=upsample,
-        method=method.value
+        method="CPU",
+        auto_save=True,
     )
 
 

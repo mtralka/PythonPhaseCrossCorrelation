@@ -12,13 +12,11 @@ from pathlib import Path
 import sys
 from typing import List
 
+# sys.path.append("...")
+from PythonPhaseCrossCorrelation.main import app
 import gdal
 import numpy as np
 from typer.testing import CliRunner
-
-
-sys.path.append("...")
-from main import app
 
 
 runner = CliRunner()
@@ -31,7 +29,7 @@ TEST_OUTFILE_NAME: str = "TEST_FILE.tif"
 
 TEST_SUITE: List[dict] = [
     {"upsample": 1, "mean": 126.266904},
-    {"upsample": 100, "mean": 244.066272}
+    {"upsample": 100, "mean": 244.066272},
 ]
 
 
@@ -39,9 +37,9 @@ def get_file_mean(path: Path) -> float:
 
     file: str = str(path)
     file_ds = gdal.Open(file)
-    file_arr: np.ndarray = np.array(
-        file_ds.GetRasterBand(1).ReadAsArray()
-    ).astype("int16")
+    file_arr: np.ndarray = np.array(file_ds.GetRasterBand(1).ReadAsArray()).astype(
+        "int16"
+    )
     file_ds = None
 
     return np.mean(file_arr)
@@ -60,12 +58,12 @@ def test_app():
                 "--out-name",
                 TEST_OUTFILE_NAME,
                 "--upsample",
-                test["upsample"]
-            ]
+                test["upsample"],
+            ],
         )
 
         outfile = Path(TEST_OUTFILE_DIR) / TEST_OUTFILE_NAME
-
+        print(result)
         assert result.exit_code == 0
         assert "Complete" in result.stdout
         assert outfile.exists()
